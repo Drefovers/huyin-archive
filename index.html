@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>นครฮู่หยิน — บันทึกเมืองแห่งวิญญาณ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#100a0c; --bg-2:#1a1114; --card:#1d1417; --card-2:#241a1d;
+  --accent:#8b1e2e; --accent-2:#c1394a; --gold:#b08d57; --gold-dim:#7a6440;
+  --ink:#ece2cd; --ink-dim:#a89c85; --line:rgba(176,141,87,0.22);
+  --admin:#3a6b5e; --admin-2:#5aa38d;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'Sarabun',sans-serif;line-height:1.8;min-height:100vh}
+h1,h2,h3,.disp{font-family:'Noto Serif Thai',serif}
+::selection{background:var(--accent);color:var(--ink)}
+
+.thread{position:fixed;top:0;left:50%;width:2px;height:100%;background:linear-gradient(to bottom,transparent,var(--accent) 8%,var(--accent) 92%,transparent);opacity:.45;z-index:1;pointer-events:none}
+
+nav{position:sticky;top:0;z-index:30;background:rgba(16,10,12,0.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);display:flex;gap:0;overflow-x:auto;padding:0 clamp(12px,4vw,48px)}
+nav button{background:none;border:none;color:var(--ink-dim);font-family:'Sarabun',sans-serif;cursor:pointer;font-size:13px;letter-spacing:.03em;padding:16px 14px;white-space:nowrap;border-bottom:2px solid transparent;transition:.25s}
+nav button:hover{color:var(--ink)}
+nav button.active{color:var(--ink);border-color:var(--gold)}
+nav button.admin-tab{color:var(--admin-2);margin-left:auto}
+nav button.admin-tab.active{border-color:var(--admin-2)}
+
+.page{display:none;position:relative;z-index:5;padding:clamp(40px,7vw,80px) clamp(20px,6vw,80px);max-width:980px;margin:0 auto;animation:fade .4s ease}
+.page.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:24px;height:1px;background:var(--gold-dim)}
+h2.title{font-size:clamp(24px,4vw,34px);font-weight:600}
+.title-line{width:48px;height:2px;background:var(--accent);margin:14px 0 28px}
+
+.hero{min-height:70vh;display:flex;flex-direction:column;justify-content:center;text-align:center;padding-top:40px}
+.banner-wrap{position:relative;width:100%;max-width:820px;margin:0 auto 30px;border-radius:10px;overflow:hidden;border:1px solid var(--line);box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.banner-wrap img{width:100%;display:block;filter:saturate(1.05) contrast(1.05)}
+.banner-wrap::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 0%,transparent 35%)}
+.hero .disp{font-size:clamp(38px,8vw,72px);font-weight:700;text-shadow:0 0 40px rgba(139,30,46,.35)}
+.hero .sub{font-size:clamp(15px,2vw,19px);color:var(--accent-2);margin-top:12px;font-family:'Noto Serif Thai',serif;font-weight:500}
+.theme-box{max-width:680px;margin:34px auto 0;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:22px 26px;text-align:left}
+.theme-box h3{color:var(--gold);font-size:14px;margin-bottom:10px;letter-spacing:.04em}
+.theme-box p{color:var(--ink-dim);font-size:14px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:20px;margin-bottom:14px}
+.grid{display:grid;gap:16px}
+.grid-2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.grid-5{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+
+.acc{border:1px solid var(--line);border-radius:6px;margin-bottom:12px;overflow:hidden;background:var(--card)}
+.acc-head{width:100%;text-align:left;background:none;border:none;color:var(--ink);font-family:'Noto Serif Thai',serif;font-size:15.5px;font-weight:600;padding:16px 20px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.acc-head:hover{color:var(--gold)}
+.acc-head .plus{color:var(--accent-2);font-size:18px;transition:.3s;flex-shrink:0}
+.acc.open .acc-head .plus{transform:rotate(45deg)}
+.acc-body{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.acc-body-in{padding:0 20px 18px;color:var(--ink-dim);font-size:14px}
+.acc-body-in p{margin-bottom:8px}
+.tag{display:inline-block;font-size:11px;letter-spacing:.06em;color:var(--accent-2);border:1px solid var(--accent);border-radius:20px;padding:2px 10px;margin-bottom:4px}
+.exp-badge{font-size:12px;color:var(--gold);white-space:nowrap;font-family:'Sarabun',sans-serif;font-weight:500}
+
+.rank-card{position:relative;padding-top:30px;text-align:left}
+.seal{position:absolute;top:-14px;left:16px;width:32px;height:32px;background:var(--accent);color:var(--ink);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif Thai',serif;font-weight:700;font-size:14px}
+.exp{margin-top:10px;padding-top:8px;border-top:1px dashed var(--line);font-size:12px;color:var(--gold)}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{padding:11px 13px;text-align:left;border-bottom:1px solid var(--line)}
+th{color:var(--gold);font-weight:500;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase}
+td{color:var(--ink-dim)}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;margin-bottom:20px}
+
+.profile{display:grid;grid-template-columns:96px 1fr;gap:22px;align-items:start;background:var(--card-2);border:1px solid var(--line);border-radius:8px;padding:24px;margin-bottom:18px}
+.avatar{width:100%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#3a2226,#12080a 70%);border:2px solid var(--gold-dim);position:relative;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.avatar::after{content:"";position:absolute;inset:0;border-radius:50%;border:1px solid var(--accent);opacity:.5;pointer-events:none}
+.profile h3{font-size:19px;font-weight:600}
+.profile .role{color:var(--accent-2);font-size:13px;margin:4px 0 12px}
+.profile p{color:var(--ink-dim);font-size:14px;margin-bottom:8px}
+.traits{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.traits span{font-size:12px;background:rgba(139,30,46,.15);color:var(--accent-2);border:1px solid var(--accent);padding:3px 10px;border-radius:20px}
+
+.arc{position:relative;padding-left:40px;margin-top:20px}
+.arc::before{content:"";position:absolute;left:14px;top:6px;bottom:6px;width:1px;background:var(--line)}
+.arc-step{position:relative;padding-bottom:32px}
+.arc-num{position:absolute;left:-40px;top:0;width:28px;height:28px;border-radius:50%;background:var(--card);border:1px solid var(--accent-2);color:var(--accent-2);display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:600;font-family:'Noto Serif Thai',serif}
+.arc-step h3{font-size:16.5px;margin-bottom:6px;font-weight:600}
+.arc-step p{color:var(--ink-dim);font-size:13.5px}
+
+.admin-lock{text-align:center;padding:60px 20px}
+.admin-lock p{color:var(--ink-dim);font-size:14px;margin-bottom:20px;max-width:480px;margin-left:auto;margin-right:auto}
+.admin-btn{background:none;border:1px solid var(--admin-2);color:var(--admin-2);font-family:'Sarabun',sans-serif;font-size:14px;padding:12px 28px;border-radius:6px;cursor:pointer;transition:.25s}
+.admin-btn:hover{background:rgba(90,163,141,.12)}
+.admin-content{display:none}
+.admin-content.show{display:block}
+.admin-note{border:1px solid var(--admin);background:rgba(58,107,94,.08);border-radius:6px;padding:18px 22px;margin-bottom:14px}
+.admin-note h3{color:var(--admin-2);font-size:15px;margin-bottom:8px}
+.admin-note p{color:var(--ink-dim);font-size:13.5px;margin-bottom:6px}
+.admin-warn{font-size:12px;color:var(--admin-2);letter-spacing:.04em;margin-bottom:24px;border-left:2px solid var(--admin-2);padding-left:12px}
+
+footer{text-align:center;padding:44px 20px;color:var(--ink-dim);font-size:12px;border-top:1px solid var(--line)}
+@media(max-width:560px){.profile{grid-template-columns:1fr}.avatar{width:80px;margin:0 auto}.thread{display:none}}
+</style>
+</head>
+<body>
+<div class="thread"></div>
+
+<nav id="nav"></nav>
+
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="banner-wrap"><img src="assets/banner.jpg" alt="ศาลเจ้าบทสวดกลับหลัง ประตูสู่นครฮู่หยิน"></div>
+    <div class="disp">นครฮู่หยิน</div>
+    <div class="sub">เมืองแห่งวิญญาณที่ไม่มีวันตาย</div>
+    <div class="theme-box">
+      <h3>ธีมหลัก</h3>
+      <p>เมืองผี ไม่มีมนุษย์หรือสิ่งมีชีวิตอื่นใดอาศัยอยู่ ผู้มาเยือนจะเข้ามาได้ก็ต่อเมื่อถูกเหล่าวิญญาณเพ่งเล็งเป็นพิเศษเท่านั้น และตัวเมืองแห่งนี้ยังมีคุณสมบัติพิเศษที่ทำให้ <b style="color:var(--ink)">ของศักดิ์สิทธิ์ใช้งานไม่ได้</b> ตลอดเวลาที่อยู่ในเขตเมือง</p>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-history">
+  <div class="eyebrow">Archive · 01</div>
+  <h2 class="title">ร่องรอยแห่งนครฮู่หยิน</h2>
+  <div class="title-line"></div>
+
+  <div class="acc"><button class="acc-head" onclick="toggleAcc(this)">ร่องรอยบาดแผล <span class="plus">+</span></button>
+    <div class="acc-body"><div class="acc-body-in">
+      <p>แคว้นฉินรวมแผ่นดินแดนมังกรเป็นหนึ่งโดยจิ๋นซีฮ่องเต้ ต้านทานการรุกรานของมองโกเลียและชนเผ่าป่าเถื่อนได้อย่างน่าประทับใจ จนถูกขนานนามว่าเป็นเทพเจ้าในร่างมนุษย์ ทว่าเวลาผ่านไปนับร้อยปีเขากลับไม่แก่ลงเลย</p>
+      <p>ความแคลงใจนำไปสู่แผนลอบปลงพระชนม์โดยทหารและชาวเมืองที่ร่วมกบฏ แต่ทั้งหมดถูกสังหารโดยชายคนเดียวอย่างโหดเหี้ยม เมืองใหม่ถูกสร้างทับสนามรบที่เต็มไปด้วยซากศพ ผูกมัดวิญญาณทั้งหมดไว้กับเมืองใหม่ตลอดกาลด้วยคำประกาศิต "เราจะสร้างทุกอย่างขึ้นมาใหม่ โดยมีพวกเขาเป็นรากฐาน"</p>
+    </div></div>
+  </div>
+
+  <div class="acc"><button class="acc-head" onclick="toggleAcc(this)">ร่องรอยเสียงกรีดร้อง <span class="plus">+</span></button>
+    <div class="acc-body"><div class="acc-body-in">
+      <p>ผนึกวิญญาณมหาศาลกลายเป็นความศักดิ์สิทธิ์ของเมือง วิญญาณถูกชุบกายผ่านการปั้นหุ่นดินเผาตามคำสั่งของฮ่องเต้ ทว่าหุ่นเหล่านี้ทำได้เพียงปฏิบัติตามคำสั่งของเจ้านายเท่านั้น ไม่อาจหันคมอาวุธใส่ทรราชย์ได้แม้แต่น้อย ต้องรบราฆ่าฟันชิงชีวิตจากผู้บริสุทธิ์เพื่อปกป้องเมืองที่แสนเกลียดนี้ตลอดมา</p>
+    </div></div>
+  </div>
+
+  <div class="acc"><button class="acc-head" onclick="toggleAcc(this)">ร่องรอยแห่งการคร่ำครวญ <span class="plus">+</span></button>
+    <div class="acc-body"><div class="acc-body-in">
+      <p>ทหารดินเพิ่มจำนวนขึ้นเรื่อยๆ จากการตายของผู้คนในเมือง จนวันหนึ่งต้นหลิวท้ายเมืองงอกกิ่งหยกสีใสประหลาด ชาวเมืองนำมาบดให้หญิงสาวคนหนึ่งกิน ภายในไม่กี่เดือนเธอคลอดธิดาออกมา แต่ตัวมารดาจากโลกไปตั้งแต่วินาทีที่เด็กลืมตาดูโลก ทหารดินที่ไม่ถูกออกคำสั่งแอบเลี้ยงเด็กสาวไว้ลับๆ เด็กใช้เวลาเพียง 13 วันเติบโตเป็นหญิงสาวเต็มตัว</p>
+    </div></div>
+  </div>
+
+  <div class="acc"><button class="acc-head" onclick="toggleAcc(this)">ร่องรอยแห่งความโกรธแค้น <span class="plus">+</span></button>
+    <div class="acc-body"><div class="acc-body-in">
+      <p>หญิงสาวผู้ถูกปลูกฝังความโกรธแค้นวางแผนก่อกบฏ โดยรอจังหวะที่ภูติผีและปีศาจไร้นามบุกถล่มเมือง แล้วกำราบพวกมันได้อย่างง่ายดายต่อหน้าฮ่องเต้ จนได้เป็นพระชายาคนโปรด ใกล้ชิดฮ่องเต้มากกว่าใครในรอบหลายร้อยปี</p>
+      <p>คืนที่ฮ่องเต้ไว้ใจที่สุด เธอพยายามลอบปลงพระชนม์ด้วยการบีบคอ และรู้ความจริงว่าเขาไม่เคยมีชีวิตให้ตายมาตั้งแต่แรก</p>
+    </div></div>
+  </div>
+
+  <div class="acc"><button class="acc-head" onclick="toggleAcc(this)">ร่องรอยแห่งการจากลา <span class="plus">+</span></button>
+    <div class="acc-body"><div class="acc-body-in">
+      <p>ปีศาจจู่โจมหญิงสาวจนเกือบสิ้นลม ก่อนสวมชุดแต่งงานให้เธอแล้วสังหารเธอในชุดนั้น แต่ร่างของเธอคือพิษร้ายจากสวรรค์มาตั้งแต่แรก เป็นพิษที่คร่าชีวิตผู้เอาชีวิตของเธอไปนั่นเอง</p>
+      <p>เธอลุกขึ้นด้วยสภาพใกล้ตาย ลากสังขารไปยังต้นหลิว ผูกริบบิ้นแดงนับพันไว้ที่กิ่งก่อนสิ้นใจ ปลดปล่อยทหารดินทั้งหมดที่ถูกกักขังนับพันปี พวกเขาสาบานจะปกป้องวิญญาณของเธอไปจนกว่าเมืองนี้จะสลายหายไป</p>
+    </div></div>
+  </div>
+</div>
+
+<div class="page" id="page-system">
+  <div class="eyebrow">Archive · 02</div>
+  <h2 class="title">เผ่าพันธุ์ และระบบพลัง</h2>
+  <div class="title-line"></div>
+
+  <div class="grid grid-2" style="margin-bottom:24px">
+    <div class="card">
+      <span class="tag">ประชากรหลัก</span>
+      <h3 style="font-size:16px;margin-bottom:8px">ภูติผีและเหล่าวิญญาณ</h3>
+      <p style="color:var(--ink-dim);font-size:13.5px">กายทิพย์ลอยได้ ทะลุผ่านสิ่งกีดขวางที่ไม่ใช่วัตถุศักดิ์สิทธิ์ ต้านทานการโจมตีกายภาพ/เวทย์ แต่แพ้เวทย์มนต์ศักดิ์สิทธิ์ระดับรุนแรง ธาตุหลักคือหยิน เป็นศัตรูกับสิ่งมีชีวิตโดยปริยายยกเว้นปีศาจ</p>
+    </div>
+    <div class="card">
+      <span class="tag">ระบบ Struggling</span>
+      <h3 style="font-size:16px;margin-bottom:8px">หลุดพันธนาการ</h3>
+      <p style="color:var(--ink-dim);font-size:13.5px">ทอย 1d20 มากกว่า 15 เพื่อหลุดสถานะควบคุมทันที หากพลาด เทิร์นถัดไปทอยเพียง 6 ขึ้นไปก็หลุดได้ และเข้าสถานะป้องกัน CC หนึ่งเทิร์น</p>
+    </div>
+  </div>
+
+  <div class="table-wrap"><table>
+    <tr><th>ระดับ</th><th>Lv</th><th>ทนทาน</th><th>ความเร็ว</th><th>พลังทำลาย</th></tr>
+    <tr><td>I</td><td>0–5</td><td>คอนกรีต</td><td>คนวิ่ง</td><td>ไม้หัก คอนกรีตร้าว</td></tr>
+    <tr><td>II</td><td>6–10</td><td>ทองแดง</td><td>นักกีฬาวิ่ง</td><td>คอนกรีตแตก ทองแดงบุบ</td></tr>
+    <tr><td>III</td><td>11–15</td><td>เหล็ก</td><td>กวางวิ่ง</td><td>ทองแดงแหลก เหล็กเสียรูป</td></tr>
+    <tr><td>IV</td><td>16–20</td><td>เหล็กกล้า</td><td>เสือวิ่ง</td><td>เหล็กแหลก เหล็กกล้าเสียรูป</td></tr>
+    <tr><td>V</td><td>21–25</td><td>ไททาเนียม</td><td>เสือชีตาห์</td><td>เหล็กกล้าแหลก ไททาเนียมบุบ</td></tr>
+  </table></div>
+
+  <div class="table-wrap"><table>
+    <tr><th>ธาตุ</th><th>ขั้น I</th><th>ขั้น III</th><th>ขั้น V</th></tr>
+    <tr><td>ไฟฟ้า</td><td>ไม้หัก คอนกรีตร้าว</td><td>ทองแดงหัก เหล็กบุบ</td><td>เหล็กกล้าหัก ไวเบรเนียมบุบ</td></tr>
+    <tr><td>เปลวเพลิง</td><td>400c</td><td>1200c</td><td>2800c</td></tr>
+    <tr><td>น้ำแข็ง</td><td>แข็งเท่าคอนกรีต</td><td>แข็งเท่าเหล็กกล้าต่ำ</td><td>แข็งเท่าไวเบรเนียมสูง</td></tr>
+    <tr><td>พลังวิญญาณ</td><td>ทำร้ายผีระดับ I เล็กน้อย</td><td>ทำร้ายผีระดับ II สาหัส</td><td>ทำร้ายผีระดับ IV สาหัส</td></tr>
+  </table></div>
+</div>
+
+<div class="page" id="page-ranks">
+  <div class="eyebrow">Archive · 03</div>
+  <h2 class="title">ระดับภูติผีแห่งฮู่หยิน</h2>
+  <div class="title-line"></div>
+  <div class="grid grid-5">
+    <div class="card rank-card"><div class="seal">I</div><h3 style="font-size:15px;margin-bottom:6px">ผีพเนจร<br><span style="font-size:11.5px;color:var(--ink-dim)">孤魂野鬼</span></h3><p style="font-size:13px;color:var(--ink-dim)">ไร้ญาติ หลงทาง ไม่มีอิทธิฤทธิ์</p><div class="exp">EXP · 100</div></div>
+    <div class="card rank-card"><div class="seal">II</div><h3 style="font-size:15px;margin-bottom:6px">ผีเฮี้ยน<br><span style="font-size:11.5px;color:var(--ink-dim)">厉鬼</span></h3><p style="font-size:13px;color:var(--ink-dim)">ตายด้วยความคับแค้น หลอกหลอน สิงสู่</p><div class="exp">EXP · 200</div></div>
+    <div class="card rank-card"><div class="seal">III</div><h3 style="font-size:15px;margin-bottom:6px">ผีดิบ<br><span style="font-size:11.5px;color:var(--ink-dim)">僵尸</span></h3><p style="font-size:13px;color:var(--ink-dim)">ดูดพลังหยินฟื้นคืนชีพ ไร้ความเจ็บปวด</p><div class="exp">EXP · 300</div></div>
+    <div class="card rank-card"><div class="seal">IV</div><h3 style="font-size:15px;margin-bottom:6px">ภูติปีศาจ<br><span style="font-size:11.5px;color:var(--ink-dim)">妖魔</span></h3><p style="font-size:13px;color:var(--ink-dim)">บำเพ็ญตบะนาน แปลงกาย ควบคุมธาตุ</p><div class="exp">EXP · 400</div></div>
+    <div class="card rank-card"><div class="seal">V</div><h3 style="font-size:15px;margin-bottom:6px">ผีเซียน<br><span style="font-size:11.5px;color:var(--ink-dim)">鬼仙</span></h3><p style="font-size:13px;color:var(--ink-dim)">จิตบริสุทธิ์ใกล้เทพเจ้า มีศาลเจ้าเป็นของตน</p><div class="exp">EXP · 500</div></div>
+  </div>
+</div>
+
+<div class="page" id="page-characters">
+  <div class="eyebrow">Archive · 04</div>
+  <h2 class="title">ตัวละครในบันทึก</h2>
+  <div class="title-line"></div>
+  <div class="profile">
+    <div class="avatar"><img src="assets/red-umbrella.jpg" alt="The Red Umbrella"></div>
+    <div><h3>The Red Umbrella</h3><div class="role">วิญญาณ · ผู้ถือคันร่มแดง</div>
+      <p>ชายหนุ่มผมแดงราวกุหลาบยามเช้า เย็นชา คาดเดาไม่ได้ ชอบเสียงฝนกระทบร่มและความเงียบสงบ ไม่ชอบแสงสว่างจ้า</p>
+      <p><b style="color:var(--ink)">สายฝนแห่งร่มแดง:</b> ฝนตกรอบตัวเสมอเมื่อปรากฏ ความรุนแรงแบ่ง 3 ระดับตามอารมณ์ ปกติ / หงุดหงิด / อาฆาต</p>
+      <div class="traits"><span>กายทิพย์</span><span>โลกที่ไม่เกี่ยวข้อง</span><span>คันร่มแดง</span></div>
+    </div>
+  </div>
+  <div class="profile">
+    <div class="avatar"><img src="assets/zhang-hanye.jpg" alt="ฉาง ฮันเย่อ"></div>
+    <div><h3>ฉาง ฮันเย่อ (Zhang Hanye)</h3><div class="role">ผีเซียน ระดับ V · ศาลเจ้าบทสวดกลับหลัง</div>
+      <p>กึ่งมนุษย์กึ่งจิ้งจอก ผมขาว หูจิ้งจอกตั้งชัน สุขุมเยือกเย็น พูดสุภาพเกินความจำเป็น เกลียดคำสัตย์สาบานเพราะเคยเชื่อจนตัวตาย</p>
+      <p><b style="color:var(--ink)">ประวัติ:</b> อดีตขันทีคนโปรดของฮ่องเต้ ถูกฆ่าเป็นคนแรกเมื่อนครเกิดโกลาหล วิญญาณผูกติดหีบคัมภีร์ สวดบทกลับหลังสาปคำสัตย์สาบานของมนุษย์</p>
+      <p style="color:var(--accent-2);font-size:13px">พลังพิเศษ: 🔒 ยังไม่สามารถใช้ความสามารถได้</p>
+      <div class="traits"><span>เจ้าระเบียบ</span><span>เก็บกด</span><span>เข็มคัมภีร์กลับหลัง</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-items">
+  <div class="eyebrow">Archive · 05</div>
+  <h2 class="title">ของประจำตัวและเครื่องราง</h2>
+  <div class="title-line"></div>
+  <div class="acc"><button class="acc-head" onclick="toggleAcc(this)">เข็มคัมภีร์กลับหลังของฉางฮันเย่อ · Epic <span class="plus">+</span></button>
+    <div class="acc-body"><div class="acc-body-in">
+      <p>เข็มเงินยาวเพรียว พันเส้นไหมแดงจารึกอักษรกลับหัว มูลค่า 350,000 เหรียญ</p>
+      <p><b style="color:var(--ink)">Vow Reversal:</b> ตรวจจับคำสัญญาล่าสุดของเป้าหมาย เพิ่มความเสียหาย 50% หากเพิ่งเอ่ยคำสัญญา</p>
+      <p><b style="color:var(--ink)">Backward Chant:</b> Silence 1 เทิร์น + แผลใจรักษาได้เฉพาะเวทย์ศักดิ์สิทธิ์ 2 เทิร์น ไม่มีผลกับศัตรูสูงกว่า 2 ระดับ ใช้ได้ 3 ครั้ง/การต่อสู้</p>
+    </div></div>
+  </div>
+  <div class="acc"><button class="acc-head" onclick="toggleAcc(this)">เหรียญห้าจักรพรรดิ · Epic <span class="plus">+</span></button>
+    <div class="acc-body"><div class="acc-body-in">
+      <p>เหรียญทองเหลืองโบราณ 5 เหรียญ ร้อยเชือกแดงปมจีน รางวัลจากเควสซ่อมบูรณะ อาจมีผลกระทบต่อเนื้อเรื่อง</p>
+      <p><b style="color:var(--ink)">Emperor's Barrier:</b> ป้องกันความเสียหาย 1 ครั้งจากการโจมตีระดับ III ลงมา ใช้ได้ 5 ครั้ง</p>
+      <p><b style="color:var(--ink)">ข้อจำกัด:</b> ใช้เหรียญแล้วไม่ใช้ต่อเนื่อง รับความเสียหายครั้งถัดไปเพิ่ม 2 เท่า</p>
+    </div></div>
+  </div>
+</div>
+
+<div class="page" id="page-quests">
+  <div class="eyebrow">Archive · 06</div>
+  <h2 class="title">เควสจากศาลเจ้าบทสวดกลับหลัง</h2>
+  <div class="title-line"></div>
+
+  <div class="acc"><button class="acc-head" onclick="toggleAcc(this)">เสียงสวดที่ผิดเพี้ยน <span class="exp-badge">EXP 100</span></button>
+    <div class="acc-body"><div class="acc-body-in"><p>ปราบหรือขับไล่ผีพเนจรที่รบกวนบทสวดใกล้ศาลเจ้า ไม่จำเป็นต้องต่อสู้เสมอไป</p></div></div>
+  </div>
+  <div class="acc"><button class="acc-head" onclick="toggleAcc(this)">แค้นที่ยังไม่จาง <span class="exp-badge">EXP 150</span></button>
+    <div class="acc-body"><div class="acc-body-in"><p>ช่วยให้ผีเฮี้ยนหลุดจากร่างที่สิงสู่ชาวเมือง</p></div></div>
+  </div>
+  <div class="acc"><button class="acc-head" onclick="toggleAcc(this)">ซากที่ไม่ควรตื่น <span class="exp-badge">EXP 200</span></button>
+    <div class="acc-body"><div class="acc-body-in"><p>ปราบผีดิบที่โผล่จากสุสานเก่าใกล้ศาลเจ้า</p></div></div>
+  </div>
+  <div class="acc"><button class="acc-head" onclick="toggleAcc(this)">ผู้ที่ผิดคำสัญญา <span class="exp-badge">EXP 150</span></button>
+    <div class="acc-body"><div class="acc-body-in"><p>สืบหาผู้ผิดคำสัตย์สาบาน นำหลักฐานกลับมาให้ฉางฮันเย่อลงโทษ การต่อสู้เป็นทางเลือก ไม่บังคับ</p></div></div>
+  </div>
+  <div class="acc"><button class="acc-head" onclick="toggleAcc(this)">ตามหาหม้อดินเผาขนาดกลาง <span class="exp-badge">EXP 120 + ความสัมพันธ์</span></button>
+    <div class="acc-body"><div class="acc-body-in">
+      <p><b style="color:var(--ink)">ประเภท:</b> ไม่จำเป็นต้องต่อสู้ (สืบหา/สำรวจ)</p>
+      <p>ผู้เล่นต้องไปแนะนำตัวรับเควสกับผู้ให้เควสก่อน เขาทำหม้อดินเผาหายระหว่างทางกลับศาลเจ้า และต้องการให้ผู้เล่นช่วยตามหา รายละเอียดเส้นทางต้องสอบถามกับตัวเขาโดยตรงในบทสนทนา</p>
+      <p><b style="color:var(--ink)">รางวัลความสำเร็จ:</b> 120 EXP + โอกาสเพิ่มความสัมพันธ์กับฉางฮันเย่อ</p>
+    </div></div>
+  </div>
+  <div class="acc"><button class="acc-head" onclick="toggleAcc(this)">ซ่อมบูรณะพื้นที่บางส่วน <span class="exp-badge">EXP 220 + 1,600 เหรียญ</span></button>
+    <div class="acc-body"><div class="acc-body-in">
+      <p><b style="color:var(--ink)">ประเภท:</b> อาจมีการต่อสู้ (วางแผน/ทางเลือก)</p>
+      <p>ฉางฮันเย่อต้องการให้ผู้เล่นช่วยจัดการงานก่อสร้าง เกี่ยวกับการซ่อมบูรณะพื้นที่หนึ่งซึ่งค่อนข้างอันตราย รายละเอียดเส้นทางและวิธีดำเนินการต้องสอบถามกับตัวเขาโดยตรง</p>
+      <p><b style="color:var(--ink)">รางวัลความสำเร็จ:</b> 220 EXP + เงิน 1,600 เหรียญ</p>
+      <p style="font-size:12px;color:var(--gold-dim)">หมายเหตุ: เควสนี้อาจปรากฏในพื้นที่ต่างๆ ของเมือง รางวัลและระดับความอันตรายอาจแตกต่างกันไปตามจุดที่รับ</p>
+    </div></div>
+  </div>
+</div>
+
+<div class="page" id="page-future">
+  <div class="eyebrow">Archive · 07 — ปลายเปิด</div>
+  <h2 class="title">เนื้อเรื่องอนาคต: รอยแตกที่ถูกปลุก</h2>
+  <div class="title-line"></div>
+  <div class="arc">
+    <div class="arc-step"><div class="arc-num">1</div><h3>สัญญาณเริ่มต้น</h3><p>ความผิดปกติเล็กๆ กระจายทั่วเมือง ฉางฮันเย่อเริ่มมีอาการพลังรั่วโดยไม่ทราบสาเหตุ</p></div>
+    <div class="arc-step"><div class="arc-num">2</div><h3>เปิดโปงผู้บงการ</h3><p>ความจริงเผยว่ามีเศษวิญญาณจักรพรรดิปีศาจฝังอยู่ในตัวฉางฮันเย่อตั้งแต่วันที่เขาถูกฆ่า</p></div>
+    <div class="arc-step"><div class="arc-num">3</div><h3>กองทัพดินตื่น</h3><p>ทหารดินไร้วิญญาณทั่วเมืองเริ่มจัดทัพอีกครั้ง อีเวนต์ระดับเมืองที่ทุกฝ่ายต้องร่วมมือป้องกัน</p></div>
+    <div class="arc-step"><div class="arc-num">4</div><h3>จุดตัดสินใจ</h3><p>ผู้เล่นเลือกชะตากรรมของฉางฮันเย่อ — ชำระล้าง ผนึกซ้ำ หรือทำลายทิ้ง</p></div>
+  </div>
+</div>
+
+<div class="page" id="page-admin">
+  <div class="eyebrow" style="color:var(--admin-2)">Restricted · GM Only</div>
+  <h2 class="title">ข้อมูลสำหรับแอดมิน</h2>
+  <div class="title-line" style="background:var(--admin-2)"></div>
+  <div class="admin-warn">หน้านี้เป็นเพียงการจัดหมวดหมู่ ไม่ใช่ระบบความปลอดภัยจริง — ห้ามแชร์ลิงก์หน้านี้ให้ผู้เล่นทั่วไป</div>
+
+  <div class="admin-lock" id="admin-lock">
+    <p>ข้อมูลในหน้านี้เป็นความจริงเบื้องหลังที่ผู้เล่นไม่ควรรู้ล่วงหน้า ใช้สำหรับผู้คุมเกม/แอดมินเท่านั้น เพื่อรันเนื้อเรื่องให้สอดคล้องกัน</p>
+    <button class="admin-btn" onclick="unlockAdmin()">เปิดข้อมูลแอดมิน</button>
+  </div>
+
+  <div class="admin-content" id="admin-content">
+    <div class="admin-note">
+      <h3>ความจริงเรื่องของศักดิ์สิทธิ์ใช้ไม่ได้ในเมือง</h3>
+      <p>พลังหยินจากผนึกวิญญาณของจักรพรรดิปีศาจปกคลุมทั่วทั้งเมืองในระดับรากฐาน ทำให้พลังหยางของวัตถุศักดิ์สิทธิ์ถูกกลืนกลายจนไร้ผล ใช้กลไกนี้อธิบายว่าทำไมผู้เล่นสายมนุษย์/นักบวชจะเสียเปรียบเมื่อเข้าเมืองนี้ และเป็นเหตุผลว่าทำไมสิ่งเดียวที่ยังใช้ได้คือของที่มีรากมาจากพลังหยินเอง เช่น เหรียญห้าจักรพรรดิ</p>
+    </div>
+    <div class="admin-note">
+      <h3>ความจริงเรื่องหญิงสาวต้นหลิว</h3>
+      <p>เธอไม่ได้เกิดขึ้นโดยบังเอิญ กิ่งหยกที่ต้นหลิวงอกมาคือร่องรอยของพลังสวรรค์ที่ถูกส่งลงมาอย่างจงใจ เพื่อสร้าง "อาวุธ" สำหรับกำจัดจักรพรรดิปีศาจโดยเฉพาะ ริบบิ้นแดงที่เธอผูกไว้ตอนสิ้นใจไม่ใช่แค่คำอธิษฐาน แต่คือส่วนหนึ่งของพิธีกรรมที่เชื่อมโยงกับผนึกใหญ่ของเมือง นี่คือเหตุผลที่ทหารดินยังคงสาบานปกป้องวิญญาณของเธอ ไม่ใช่ปกป้องเมืองโดยตรง</p>
+    </div>
+    <div class="admin-note">
+      <h3>เศษวิญญาณจักรพรรดิในตัวฉางฮันเย่อ</h3>
+      <p>ฉางฮันเย่อถูกฆ่าเป็นคนแรกไม่ใช่เรื่องบังเอิญ แต่เพราะจักรพรรดิปีศาจฝังเศษวิญญาณของตนไว้ในร่างของขันทีที่ภักดีที่สุด เป็นการลงโทษเชิงสัญลักษณ์ ตัวฉางฮันเย่อเองไม่รู้เรื่องนี้ นี่คือสาเหตุที่แท้จริงว่าทำไมพลังของเขาถูกล็อกไว้ในสถานะปัจจุบัน ให้ใช้ข้อมูลนี้เป็นแกนกลางของอาร์คเนื้อเรื่องอนาคต "รอยแตกที่ถูกปลุก"</p>
+    </div>
+    <div class="admin-note">
+      <h3>ความลับของหม้อดินเผาที่หายไป</h3>
+      <p>ใช้หม้อดินเผาใบนี้เป็นจุดเชื่อมโยงเข้าอาร์คใหญ่ได้ แนะนำให้กำหนดว่าภายในหม้อบรรจุเถ้ากระดูกของทหารกลุ่มแรกที่ตายในสงครามกบฏ หรือเป็นภาชนะที่เคยใช้เก็บเสียงสวดต้องห้ามที่ฉางฮันเย่อไม่อยากให้ใครเจอ ผู้เล่นที่ทำเควสนี้สำเร็จอาจได้ยินเสียงกระซิบแปลกๆ จากหม้อโดยไม่รู้ความหมาย เก็บไว้เป็นปมสำหรับอาร์คถัดไป</p>
+    </div>
+    <div class="admin-note">
+      <h3>คำแนะนำการเชื่อมเควสเข้าเนื้อเรื่องหลัก</h3>
+      <p>เควสเล็กๆ อย่างตามหาหม้อดินเผาและซ่อมบูรณะพื้นที่ควรถูกใช้เป็นจุดหว่านเมล็ดพันธุ์ (foreshadowing) อย่างสม่ำเสมอ ก่อนเข้าสู่เฟส 1 ของอาร์คใหญ่จริง ให้ฉางฮันเย่อแสดงพฤติกรรมผิดปกติเล็กน้อยระหว่างบทสนทนาในเควสเหล่านี้ เพื่อไม่ให้เฟส 2 (เปิดโปงผู้บงการ) รู้สึกฉับพลันเกินไปสำหรับผู้เล่น</p>
+    </div>
+  </div>
+</div>
+
+<footer>บันทึกนครฮู่หยิน · เอกสารรวบรวมเพื่อการเล่นตามบทบาท</footer>
+
+<script>
+const pages=[
+  {id:'home',label:'ภาพรวม'},
+  {id:'history',label:'ประวัติศาสตร์'},
+  {id:'system',label:'เผ่าพันธุ์ & ระบบ'},
+  {id:'ranks',label:'ระดับภูติผี'},
+  {id:'characters',label:'ตัวละคร'},
+  {id:'items',label:'ไอเทม'},
+  {id:'quests',label:'เควส'},
+  {id:'future',label:'เนื้อเรื่องอนาคต'},
+  {id:'admin',label:'แอดมิน',admin:true},
+];
+const navEl=document.getElementById('nav');
+pages.forEach(p=>{
+  const b=document.createElement('button');
+  b.textContent=p.label;
+  b.dataset.id=p.id;
+  if(p.admin)b.classList.add('admin-tab');
+  b.onclick=()=>goPage(p.id);
+  navEl.appendChild(b);
+});
+function goPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  navEl.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.id===id));
+  window.scrollTo({top:0,behavior:'smooth'});
+  location.hash=id;
+}
+goPage(location.hash.replace('#','')||'home');
+
+function toggleAcc(btn){
+  const acc=btn.parentElement;
+  const body=acc.querySelector('.acc-body');
+  const open=acc.classList.contains('open');
+  document.querySelectorAll('.acc').forEach(a=>{
+    if(a!==acc){a.classList.remove('open');a.querySelector('.acc-body').style.maxHeight=null;}
+  });
+  if(open){acc.classList.remove('open');body.style.maxHeight=null;}
+  else{acc.classList.add('open');body.style.maxHeight=body.scrollHeight+'px';}
+}
+function unlockAdmin(){
+  document.getElementById('admin-lock').style.display='none';
+  document.getElementById('admin-content').classList.add('show');
+}
+</script>
+</body>
+</html>
