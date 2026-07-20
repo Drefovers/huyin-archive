@@ -101,6 +101,12 @@ td{color:var(--ink-dim)}
 .admin-warn{font-size:12px;color:var(--admin-2);letter-spacing:.04em;margin-bottom:24px;border-left:2px solid var(--admin-2);padding-left:12px}
 
 footer{text-align:center;padding:44px 20px;color:var(--ink-dim);font-size:12px;border-top:1px solid var(--line)}
+.group-wrap{width:100%;border-radius:8px;overflow:hidden;border:1px solid var(--line);margin-bottom:26px}
+.group-wrap img{width:100%;display:block}
+.guard-num{position:absolute;top:-14px;left:16px;width:30px;height:30px;background:var(--accent);color:var(--ink);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif Thai',serif;font-weight:700;font-size:13px}
+.guard-role{color:var(--gold);font-size:12.5px;margin-bottom:6px;letter-spacing:.02em}
+.guard-ability{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+.guard-ability b{color:var(--ink)}
 @media(max-width:560px){.profile{grid-template-columns:1fr}.avatar{width:80px;margin:0 auto}.thread{display:none}}
 </style>
 </head>
@@ -232,6 +238,86 @@ footer{text-align:center;padding:44px 20px;color:var(--ink-dim);font-size:12px;b
   </div>
 </div>
 
+<div class="page" id="page-guards">
+  <div class="eyebrow">Archive · 04.5</div>
+  <h2 class="title">องครักษ์เก้า · 九柳兵 (จิ่วหลิวปิง)</h2>
+  <div class="title-line"></div>
+  <div class="group-wrap"><img src="assets/nine-guards.jpg" alt="องครักษ์เก้าแห่งต้นหลิว"></div>
+  <p style="color:var(--ink-dim);font-size:14px;margin-bottom:24px">อดีตทหารดินเก้านายที่ได้รับจิตวิญญาณคืนมาในคืนที่ธรณีประตูแง้มเปิด สวมเครื่องแบบสีดำทรงคอตั้งคล้ายชุดนายทหารโบราณ หมวกทรงหม้อตรูปสีดำ ใบหน้าซีดขาวไร้สีเลือด ยืนเฝ้าต้นหลิวท้ายเมืองตลอดกาล ไม่พูดกับใครนอกจากกันเอง</p>
+
+  <div class="acc"><button class="acc-head" onclick="toggleAcc(this)">1. ผู้เฝ้าปมแรก <span class="plus">+</span></button>
+    <div class="acc-body"><div class="acc-body-in">
+      <p class="guard-role">หัวหน้าองครักษ์โดยพฤตินัย</p>
+      <p>ร่างสูงใหญ่ที่สุดในเก้าคน เกราะดินเผาแตกร้าวเป็นเส้นคล้ายรอยผ่าฟ้า มือขวากำริบบิ้นแดงเส้นแรกไว้ตลอดเวลา พูดน้อย ตัดสินใจเด็ดขาด เป็นผู้ตัดสินใจสุดท้ายว่าใครจะเข้าใกล้รากต้นหลิวได้</p>
+      <div class="guard-ability"><b>Silent Command (คำสั่งเงียบ):</b> Passive — องครักษ์ที่อยู่ในระยะ 15 เมตรรับรู้เจตนาของเขาได้ทันทีโดยไม่ต้องพูด ทำให้แผนร่วมกันไม่มีดีเลย์ ใช้ได้เฉพาะกับสมาชิกในกลุ่มเก้าคน</div>
+    </div></div>
+  </div>
+
+  <div class="acc"><button class="acc-head" onclick="toggleAcc(this)">2. ผู้เฝ้าปมเที่ยงคืน <span class="plus">+</span></button>
+    <div class="acc-body"><div class="acc-body-in">
+      <p class="guard-role">ผู้เฝ้ายามกลางคืน</p>
+      <p>ร่างเพรียวบาง เคลื่อนไหวเงียบราวไม่มีน้ำหนัก รอยแตกบนตัวเรืองแสงสีน้ำเงินจางยามค่ำคืน ไวต่อความเปลี่ยนแปลงของแสงเงาและลมมากที่สุด</p>
+      <div class="guard-ability"><b>Nightless Eye (ตาไร้ราตรี):</b> Active 3 ครั้ง/วัน — มองทะลุความมืดสนิทและภาพลวงตาระดับกลางในรัศมี 20 เมตร เป็นเวลา 2 เทิร์น ไม่มีผลกับสิ่งล่องหนด้วยพลังศักดิ์สิทธิ์</div>
+    </div></div>
+  </div>
+
+  <div class="acc"><button class="acc-head" onclick="toggleAcc(this)">3. ผู้ไม่วางดาบ <span class="plus">+</span></button>
+    <div class="acc-body"><div class="acc-body-in">
+      <p class="guard-role">ผู้เฝ้าด้านการต่อสู้</p>
+      <p>ถือดาบดินเผาที่แตกเป็นรอยแต่ไม่เคยหัก ท่ายืนพร้อมชักดาบตลอดเวลา ตึงเครียด ระแวดระวังเกินเหตุ มักถูกคนอื่นขอให้ผ่อนดาบลง</p>
+      <div class="guard-ability"><b>Unbroken Guard (แนวรับไม่มีวันแตก):</b> Active 2 ครั้ง/การต่อสู้ — ปัดป้องการโจมตีกายภาพได้ 1 ครั้งแบบไม่มีเงื่อนไขระดับ ยกเว้นโจมตีจากด้านหลัง คูลดาวน์ 2 เทิร์น</div>
+    </div></div>
+  </div>
+
+  <div class="acc"><button class="acc-head" onclick="toggleAcc(this)">4. ผู้จำใบหน้านางได้ <span class="plus">+</span></button>
+    <div class="acc-body"><div class="acc-body-in">
+      <p class="guard-role">ผู้เก็บความทรงจำ</p>
+      <p>ท่าทางอ่อนโยนกว่าคนอื่น มือประคองเศษผ้าไหมของหญิงสาวใบหยกไว้เสมอ เศร้าสร้อยแต่สงบ เป็นผู้บันทึกประวัติศาสตร์ของกลุ่ม</p>
+      <div class="guard-ability"><b>Her Memory Still Warm (ความทรงจำที่ยังอุ่น):</b> Active 1 ครั้ง/การต่อสู้ — ลดผลสถานะหวาดกลัว/สิ้นหวังลง 1 ระดับให้พันธมิตรในระยะ 10 เมตร เป็นเวลา 2 เทิร์น</div>
+    </div></div>
+  </div>
+
+  <div class="acc"><button class="acc-head" onclick="toggleAcc(this)">5. ผู้เฝ้าราก <span class="plus">+</span></button>
+    <div class="acc-body"><div class="acc-body-in">
+      <p class="guard-role">ผู้เฝ้าโคนต้นหลิว</p>
+      <p>ร่างเตี้ยแต่แน่นและมั่นคงที่สุด นั่งคุกเข่าที่โคนต้นแทบตลอดเวลา อดทน นิ่งเฉย ราวกับกลายเป็นส่วนหนึ่งของรากไม้</p>
+      <div class="guard-ability"><b>Rooted Stand (หยั่งรากมั่นคง):</b> Passive — ในระยะ 5 เมตรจากโคนต้นหลิว ไม่สามารถถูกผลักไสหรือดันเคลื่อนที่ได้ และรับความเสียหายกายภาพลดลง 20%</div>
+    </div></div>
+  </div>
+
+  <div class="acc"><button class="acc-head" onclick="toggleAcc(this)">6. ผู้เฝ้ากิ่ง <span class="plus">+</span></button>
+    <div class="acc-body"><div class="acc-body-in">
+      <p class="guard-role">ผู้เฝ้ายอดต้นหลิว</p>
+      <p>มักปีนป่ายอยู่บนกิ่งสูง มองลงมาสำรวจเมืองจากมุมสูง ช่างสังเกต พูดจาเป็นปริศนาบ้างเป็นบางครั้ง</p>
+      <div class="guard-ability"><b>Watcher's Signal (สัญญาณผู้เฝ้ายอด):</b> Passive — มองเห็นความเคลื่อนไหวผิดปกติไกลถึง 100 เมตรรอบต้นหลิว ส่งสัญญาณเตือนองครักษ์ทุกคนทันทีเมื่อพบสิ่งผิดปกติ</div>
+    </div></div>
+  </div>
+
+  <div class="acc"><button class="acc-head" onclick="toggleAcc(this)">7. ผู้นับริบบิ้น <span class="plus">+</span></button>
+    <div class="acc-body"><div class="acc-body-in">
+      <p class="guard-role">ผู้ดูแลจำนวนริบบิ้น</p>
+      <p>มือทั้งสองเต็มไปด้วยรอยผูกปมจากการนับริบบิ้นซ้ำแล้วซ้ำเล่า เจ้าระเบียบ ย้ำคิดย้ำทำ นับทุกอย่างรอบตัวโดยไม่รู้ตัว</p>
+      <div class="guard-ability"><b>Exact Count (นับไม่เคยพลาด):</b> Active 1 ครั้ง/วัน — ตรวจสอบรัศมี 30 เมตร เปิดเผยสิ่งซ่อนตัวหรือปลอมตัวทั้งหมด รวมถึงภูติปีศาจที่แปลงกาย ใช้เวลาสวด 1 เทิร์นก่อนเห็นผล</div>
+    </div></div>
+  </div>
+
+  <div class="acc"><button class="acc-head" onclick="toggleAcc(this)">8. ผู้ไม่มีวันหลับ <span class="plus">+</span></button>
+    <div class="acc-body"><div class="acc-body-in">
+      <p class="guard-role">ผู้เฝ้ายามตลอด 24 ชั่วโมง</p>
+      <p>ดวงตาทั้งคู่แตกร้าวจนดูเหมือนเปิดค้างตลอดเวลา ไม่เคยแสดงท่าทีอ่อนล้า มองว่าการเฝ้ายามคือเหตุผลเดียวที่ตนยังมีตัวตนอยู่</p>
+      <div class="guard-ability"><b>Eternal Vigil (เฝ้าระวังนิรันดร์):</b> Passive — ต้านทานสถานะสตั้น หลับ หรือมึนงงทุกชนิดได้เสมอ ไม่ต้องทอยต้านทาน</div>
+    </div></div>
+  </div>
+
+  <div class="acc"><button class="acc-head" onclick="toggleAcc(this)">9. ผู้เฝ้าปมสุดท้าย <span class="plus">+</span></button>
+    <div class="acc-body"><div class="acc-body-in">
+      <p class="guard-role">ผู้เฝ้าริบบิ้นเส้นสุดท้ายของหญิงสาวใบหยก</p>
+      <p>ร่างเก่าแก่ที่สุด รอยแตกลึกที่สุด ท่าทางอ่อนแรงกว่าคนอื่นราวกับแบกรับน้ำหนักบางอย่างไว้ตลอดเวลา สงบนิ่งที่สุด พูดน้อยแต่มีน้ำหนักเสมอ</p>
+      <div class="guard-ability"><b>Final Knot's Toll (ราคาของปมสุดท้าย):</b> Active 1 ครั้ง/การเผชิญหน้าใหญ่ — สร้างเกราะป้องกันความเสียหายทุกชนิดให้ต้นหลิวทั้งต้นได้ 1 ครั้งใหญ่ระดับพื้นที่ แต่หลังใช้ ตัวผู้เฝ้าปมสุดท้ายจะอ่อนแรงลง ป้องกันตัวเองลดลง 30% เป็นเวลา 3 วัน</div>
+    </div></div>
+  </div>
+</div>
+
 <div class="page" id="page-items">
   <div class="eyebrow">Archive · 05</div>
   <h2 class="title">ของประจำตัวและเครื่องราง</h2>
@@ -342,6 +428,7 @@ const pages=[
   {id:'system',label:'เผ่าพันธุ์ & ระบบ'},
   {id:'ranks',label:'ระดับภูติผี'},
   {id:'characters',label:'ตัวละคร'},
+  {id:'guards',label:'องครักษ์เก้า'},
   {id:'items',label:'ไอเทม'},
   {id:'quests',label:'เควส'},
   {id:'future',label:'เนื้อเรื่องอนาคต'},
