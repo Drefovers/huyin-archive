@@ -1,0 +1,1073 @@
+<title>One Door Left</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout: hallway-signage guide. Sticky room-sign tab bar, a short home page (title, pitch, door demo), then one tab per topic made of dossier panels. Single dark look on purpose (fluorescent night). */
+:root {
+  --bg: #12110d; --surface: #1a1913; --surface-2: #23211a; --line: #3a3626;
+  --fg: #e9e4cf; --muted: #a8a28a; --carpet: #c9b44c;
+  --red: #d2402f; --red-t: #f27d6e; --blue: #3a78d8; --blue-t: #84acf0;
+  --purple: #9a5be0; --purple-t: #c29af2; --ok: #86b56f; --warn: #e2a63c;
+  --f-display: "Chakra Petch", "IBM Plex Sans Thai", sans-serif;
+  --f-body: "IBM Plex Sans Thai", "Noto Sans Thai", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+body { background: var(--bg); color: var(--fg); font-family: var(--f-body); font-size: 16px; line-height: 1.75; margin: 0;
+  padding-block: 0 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
+.wrap { max-width: 1040px; margin-inline: auto; }
+h1, h2, h3, h4 { font-family: var(--f-display); line-height: 1.2; text-wrap: balance; margin: 0; }
+p { margin: 0; }
+a { color: var(--carpet); }
+:focus-visible { outline: 2px solid var(--carpet); outline-offset: 3px; }
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); border-bottom: 1px solid var(--line);
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding-inline: max(16px, env(safe-area-inset-left, 0px)); }
+.nav ul { list-style: none; margin: 0 auto; padding: 0; max-width: 1040px; display: flex; gap: 4px; overflow-x: auto; }
+.nav a { display: block; white-space: nowrap; text-decoration: none; color: var(--muted); font-family: var(--f-mono); font-size: 12px;
+  letter-spacing: .06em; text-transform: uppercase; padding: 14px 10px; border-bottom: 2px solid transparent; }
+.nav a:hover { color: var(--fg); }
+.nav a[aria-current="page"] { color: var(--carpet); border-bottom-color: var(--carpet); }
+.eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--carpet); }
+.tab { padding-block: 36px 0; display: grid; gap: 40px; }
+.ph { display: grid; gap: 10px; }
+.ph h2 { font-size: clamp(28px, 6vw, 46px); font-weight: 700; }
+.ph p { color: var(--muted); max-width: 66ch; }
+.toc { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 6px 0 0; }
+.toc a { display: block; font-family: var(--f-mono); font-size: 12px; padding: 4px 10px; border: 1px solid var(--line); text-decoration: none; color: var(--muted); }
+.toc a:hover { color: var(--fg); border-color: var(--carpet); }
+section.sec { border-top: 1px solid var(--line); padding-top: 32px; display: grid; gap: 20px; }
+.sec > h3 { font-size: clamp(22px, 4vw, 30px); font-weight: 600; }
+.sec > .lead { color: var(--muted); max-width: 70ch; }
+h4 { font-size: 17px; font-weight: 600; }
+.grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr)); }
+.grid.wide { grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }
+.panel { background: var(--surface); border: 1px solid var(--line); padding: 18px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.panel p, .panel li { color: var(--muted); font-size: 15px; }
+.panel ul, .rules { margin: 0; padding-left: 1.15em; display: grid; gap: 4px; }
+.panel strong, .rules strong { color: var(--fg); font-weight: 500; }
+.tag { display: inline-block; font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; padding: 0 8px;
+  border: 1px solid var(--line); color: var(--muted); justify-self: start; line-height: 1.7; }
+.tag.new { color: var(--warn); border-color: #66501f; }
+.tag.doc { color: var(--ok); border-color: #44593a; }
+.tag.hot { color: var(--red-t); border-color: #6b2c25; }
+.tag.cool { color: var(--blue-t); border-color: #2d4f86; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tbl { overflow-x: auto; border: 1px solid var(--line); }
+table { border-collapse: collapse; width: 100%; min-width: 600px; font-size: 14.5px; }
+th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: var(--f-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 500; background: var(--surface-2); }
+td { color: var(--fg); }
+td.m { color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+.fine { font-size: 13px; color: var(--muted); }
+.callout { border: 1px solid var(--line); border-left: 3px solid var(--carpet); background: var(--surface); padding: 16px 18px; display: grid; gap: 6px; }
+.callout p { color: var(--muted); font-size: 15px; }
+.callout b { font-family: var(--f-display); font-weight: 600; color: var(--fg); }
+.c-red { color: var(--red-t); } .c-blue { color: var(--blue-t); } .c-purple { color: var(--purple-t); }
+/* home */
+.hero { display: grid; gap: 28px; }
+.hero h1 { font-size: clamp(44px, 11vw, 104px); font-weight: 700; letter-spacing: -.01em; line-height: 1; }
+.hero h1 em { font-style: normal; color: var(--purple-t); }
+.tagline { font-family: var(--f-display); font-size: clamp(18px, 3.2vw, 26px); font-weight: 500; max-width: 30ch; }
+.lede { max-width: 64ch; color: var(--muted); font-size: 17px; }
+.hall { position: relative; border: 1px solid var(--line); overflow: hidden; background: linear-gradient(#1d1b14 0%, #2a2719 62%, #1b190f 62%);
+  min-height: 330px; display: flex; justify-content: center; align-items: flex-end; gap: clamp(24px, 12vw, 140px); padding: 0 16px; }
+.hall::before { content: ""; position: absolute; inset: 62% 0 0 0;
+  background: repeating-linear-gradient(90deg, transparent 0 38px, rgba(0,0,0,.18) 38px 40px), linear-gradient(#6e6126, #3d3715); }
+.light { position: absolute; top: 14px; left: 50%; translate: -50% 0; width: min(46%, 260px); height: 10px; background: #f4efc8;
+  box-shadow: 0 0 40px 14px rgba(244,239,200,.28); animation: flick 7s infinite steps(1); }
+@keyframes flick { 0%,100%{opacity:1} 41%{opacity:1} 42%{opacity:.35} 43%{opacity:1} 44%{opacity:.5} 45%{opacity:1} 88%{opacity:1} 89%{opacity:.6} 90%{opacity:1} }
+.door { position: relative; z-index: 1; width: clamp(96px, 24vw, 170px); aspect-ratio: 1 / 2.05; margin-bottom: 44px; border: 7px solid rgba(0,0,0,.35); border-bottom: 0; }
+.door.red { background: linear-gradient(90deg, #b8362a, #d2402f 55%, #a82f24); }
+.door.blue { background: linear-gradient(90deg, #2f63b8, #3a78d8 55%, #2a5aa8); }
+.door::before { content: ""; position: absolute; inset: 12% 14% 38% 14%; border: 3px solid rgba(0,0,0,.25); }
+.door::after { content: ""; position: absolute; right: 12%; top: 54%; width: 9px; height: 9px; border-radius: 50%; background: #e8dca0; }
+.door b { position: absolute; left: 50%; top: -34px; translate: -50% 0; z-index: 2; font-family: var(--f-mono); font-weight: 500; font-size: 11px;
+  letter-spacing: .12em; white-space: nowrap; background: var(--surface); border: 1px solid var(--line); padding: 2px 8px; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; }
+.stat { border-top: 2px solid var(--line); padding-top: 10px; display: grid; gap: 2px; }
+.stat .n { font-family: var(--f-display); font-size: 36px; font-weight: 700; line-height: 1.1; }
+.stat .l { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.flow { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); list-style: none; padding: 0; margin: 0; counter-reset: s; }
+.flow li { background: var(--surface); border: 1px solid var(--line); padding: 16px 18px; display: grid; gap: 6px; counter-increment: s; }
+.flow li::before { content: "ขั้น " counter(s); font-family: var(--f-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--purple-t); }
+.flow li p { color: var(--muted); font-size: 15px; }
+.tabcards { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); }
+.tabcards a { display: grid; gap: 4px; padding: 16px 18px; border: 1px solid var(--line); background: var(--surface); text-decoration: none; color: var(--fg); }
+.tabcards a:hover { border-color: var(--carpet); }
+.tabcards span { color: var(--muted); font-size: 14px; line-height: 1.6; }
+.tabcards b { font-family: var(--f-display); font-size: 18px; font-weight: 600; }
+/* demo */
+.demo { background: var(--surface); border: 1px solid var(--line); padding: 20px; display: grid; gap: 14px; }
+.pads { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.dz { border: 2px solid var(--line); padding: 14px; display: grid; gap: 10px; min-width: 0; }
+.dz.red { border-color: #7b2f27; } .dz.blue { border-color: #2d4f86; }
+.dz.sealed { opacity: .35; }
+.dz h4 { font-family: var(--f-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; font-weight: 500; }
+.dz.red h4 { color: var(--red-t); } .dz.blue h4 { color: var(--blue-t); }
+.hands { display: flex; flex-wrap: wrap; gap: 6px; min-height: 34px; }
+.hand { width: 34px; height: 34px; border: 1px solid var(--line); background: var(--surface-2); font-family: var(--f-mono); font-size: 11px; color: var(--fg); }
+.dz.red .hand { background: #5a231d; border-color: var(--red); } .dz.blue .hand { background: #1f3a66; border-color: var(--blue); }
+.beat { font-family: var(--f-mono); font-size: 12px; color: var(--muted); }
+.lobby { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-family: var(--f-mono); font-size: 12px; color: var(--muted); }
+.pl { width: 40px; height: 40px; font-family: var(--f-mono); font-size: 13px; cursor: pointer; background: var(--surface-2); color: var(--fg); border: 1px solid var(--line); }
+.pl.on-red { background: #5a231d; border-color: var(--red); } .pl.on-blue { background: #1f3a66; border-color: var(--blue); }
+.pl:disabled { cursor: default; }
+.status { font-family: var(--f-mono); font-size: 14px; min-height: 3.4em; }
+.status .big { font-family: var(--f-display); font-size: 26px; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.btn { font-family: var(--f-mono); font-size: 13px; padding: 10px 16px; cursor: pointer; background: transparent; color: var(--fg); border: 1px solid var(--muted); }
+.btn:hover { border-color: var(--carpet); color: var(--carpet); }
+.seg { display: inline-flex; border: 1px solid var(--line); }
+.seg button { font-family: var(--f-mono); font-size: 13px; padding: 8px 14px; background: transparent; color: var(--muted); border: 0; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--surface-2); color: var(--carpet); }
+@media (max-width: 520px) { .pads { grid-template-columns: 1fr; } }
+/* gauges, inventory, specs */
+.gauge { display: grid; gap: 6px; }
+.gauge .bar { height: 12px; background: var(--surface-2); border: 1px solid var(--line); position: relative; }
+.gauge .bar i { position: absolute; inset: 0 auto 0 0; background: var(--carpet); }
+.gauge .bar u { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--red-t); }
+.gauge .lab { display: flex; justify-content: space-between; gap: 8px; font-family: var(--f-mono); font-size: 12px; color: var(--muted); }
+.inv-wrap { display: grid; gap: 20px; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); align-items: start; }
+@media (max-width: 800px) { .inv-wrap { grid-template-columns: 1fr; } }
+.inv { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(3, 72px); gap: 4px; background: var(--bg); padding: 4px; border: 1px solid var(--line); max-width: 340px; }
+.cell { background: var(--surface-2); border: 1px solid var(--line); font-size: 12px; line-height: 1.3; padding: 6px; display: flex; align-items: flex-end; min-width: 0; }
+.cell.empty { background: transparent; border-style: dashed; color: var(--muted); align-items: center; justify-content: center; }
+.cell.food { background: #3f3615; border-color: #7a6a25; } .cell.water { background: #17314f; border-color: #2d5a8f; }
+.cell.tool { background: #2b2540; border-color: #54468a; } .cell.note { background: #3a2a1e; border-color: #7a5636; }
+.spec { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 6px 14px; margin: 0; font-size: 14.5px; }
+.spec dt { font-family: var(--f-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+.spec dd { margin: 0; color: var(--fg); }
+@media (max-width: 480px) { .spec { grid-template-columns: 1fr; gap: 0; } .spec dd { margin-bottom: 8px; } }
+.wcard header { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+.code { font-family: var(--f-mono); font-size: 13px; color: var(--carpet); }
+.dots { display: inline-flex; gap: 3px; }
+.dots i { width: 8px; height: 8px; background: var(--line); }
+.dots i.on { background: var(--red-t); }
+.quote { border-left: 2px solid var(--purple); padding-left: 12px; color: var(--fg); font-size: 15px; }
+.log { background: var(--surface); border: 1px solid var(--line); padding: 14px 16px; display: grid; gap: 4px; }
+.log .id { font-family: var(--f-mono); font-size: 12px; color: var(--purple-t); }
+.log p { color: var(--muted); font-size: 14px; }
+.log q { color: var(--fg); font-size: 15px; quotes: "“" "”"; }
+footer { border-top: 1px solid var(--line); margin-top: 56px; padding-top: 20px; color: var(--muted); font-size: 14px; }
+@media (prefers-reduced-motion: reduce) { .light { animation: none; } html { scroll-behavior: auto; } }
+</style>
+
+<div class="wrap">
+<nav class="nav" aria-label="สารบัญ">
+  <ul id="tabbar">
+    <li><a href="#home">หน้าหลัก</a></li>
+    <li><a href="#systems">ระบบ</a></li>
+    <li><a href="#body">ร่างกาย</a></li>
+    <li><a href="#worlds">มิติ</a></li>
+    <li><a href="#beings">เอนทิตี</a></li>
+    <li><a href="#story">เนื้อเรื่อง</a></li>
+    <li><a href="#arg">ARG</a></li>
+    <li><a href="#tech">เทคนิค</a></li>
+    <li><a href="#plan">แผนงาน</a></li>
+  </ul>
+</nav>
+
+<main class="tab" id="home">
+  <header class="hero">
+    <div style="display:grid; gap:14px;">
+      <p class="eyebrow">Roblox · Liminal Horror · 16+ · 6 ผู้เล่น (8 ด้วย Game Pass)</p>
+      <h1>One Door <em>Left</em></h1>
+      <p class="tagline">เลือกได้บานเดียว ส่วนบานที่เหลือจะไม่เปิดอีก</p>
+      <p class="lede">คุณและทีมตื่นขึ้นในโถงทางเดินที่ไม่มีใครสร้าง มีประตูแดงกับประตูฟ้าตรงหน้า ทุกคนต้องแนบฝ่ามือลงบนบานที่เลือก แล้วบานตรงข้ามจะล็อกตัวเองตลอดไป ข้างหลังประตูคือมิติที่ไม่เหมือนกันเลย บางที่เป็นมิตร บางที่เป็นเกม 2D เก่าๆ บางที่มืดสนิท และทุกที่เอาบางอย่างจากร่างกายของคุณไปได้</p>
+    </div>
+    <div class="hall" role="img" aria-label="โถงทางเดินที่มีประตูสีแดงและสีฟ้าอยู่คู่กัน">
+      <div class="light"></div>
+      <div class="door red"><b>▲ RED</b></div>
+      <div class="door blue"><b>● BLUE</b></div>
+    </div>
+    <div class="stats">
+      <div class="stat"><span class="n">12</span><span class="l">มิติในพูล สุ่มมา 6 มิติต่อรอบ</span></div>
+      <div class="stat"><span class="n">1</span><span class="l">ประตูม่วง เปิดได้เมื่อผ่านครบ 6 มิติ</span></div>
+      <div class="stat"><span class="n">5</span><span class="l">ส่วนของร่างกายที่บาดเจ็บหรือขาดได้</span></div>
+      <div class="stat"><span class="n">3:33</span><span class="l">เวลาที่นาฬิกาทุกเรือนในเกมค้างอยู่</span></div>
+    </div>
+  </header>
+
+  <section class="sec">
+    <h3>รอบหนึ่งเป็นอย่างไร</h3>
+    <ol class="flow">
+      <li><h4>แนบฝ่ามือ</h4><p>ทุกคนกด E ค้างที่บานประตู ใครเกินครึ่งก็ล็อกอีกบาน หัวใจของประตูเต้นเร็วขึ้นตามจำนวนฝ่ามือ</p></li>
+      <li><h4>ข้ามไปอีกมิติ</h4><p>ที่นั่นอาจใจดี อาจแค่แปลก หรืออาจพยายามเอาแขนคุณไป กฎของเกมเปลี่ยนไปตามมิติ</p></li>
+      <li><h4>พาทุกคนกลับ</h4><p>แบกคนเจ็บ แบ่งเสบียง หาประตูกลับ โถงหลักจะผิดเพี้ยนมากขึ้นทุกครั้งที่กลับมา</p></li>
+      <li><h4>ประตูม่วง</h4><p>ผ่านครบ 6 มิติ ประตูแดงกับฟ้าหลอมรวมกัน และเรื่องทั้งหมดถูกเปิดเผย</p></li>
+    </ol>
+  </section>
+
+  <section class="sec">
+    <h3>ลองแนบฝ่ามือ</h3>
+    <p class="lead">เดโมกติกาโหวตประตู ผู้เล่นทุกคนมีฝ่ามือหนึ่งข้าง กดชื่อเพื่อวางมือบนบานแดง บานฟ้า หรือยกมือกลับ</p>
+    <div class="demo">
+      <div class="row"><span class="fine">จำนวนผู้เล่น</span>
+        <div class="seg" role="group" aria-label="จำนวนผู้เล่น">
+          <button type="button" id="n6" aria-pressed="true">6 คน</button>
+          <button type="button" id="n8" aria-pressed="false">8 คน (Game Pass)</button>
+        </div>
+      </div>
+      <div class="pads">
+        <div class="dz red" id="z-red"><h4>▲ ประตูแดง</h4><div class="hands" id="h-red"></div><div class="beat" id="b-red"></div></div>
+        <div class="dz blue" id="z-blue"><h4>● ประตูฟ้า</h4><div class="hands" id="h-blue"></div><div class="beat" id="b-blue"></div></div>
+      </div>
+      <div class="lobby" id="lobby"></div>
+      <div class="status" id="status" aria-live="polite"></div>
+      <div class="row">
+        <button class="btn" id="b-rand" type="button">สุ่มตำแหน่ง</button>
+        <button class="btn" id="b-time" type="button">ข้ามเวลา 30 วินาที</button>
+        <button class="btn" id="b-reset" type="button">เริ่มใหม่</button>
+      </div>
+      <p class="fine">กติกาเต็มอยู่ในแท็บระบบ มิติที่สุ่มได้มาจากพูลเดียวกันไม่ว่าเลือกสีไหน</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h3>อ่านต่อ</h3>
+    <div class="tabcards">
+      <a href="#systems"><b>ระบบ</b><span>โหวตประตู เสบียง สตามิน่า กระเป๋า บทบาท เสียงและความเงียบ</span></a>
+      <a href="#body"><b>ร่างกาย</b><span>ตาบอด แขนซ้ายขวา ขา การขาด การรักษาทีละส่วน การแบก</span></a>
+      <a href="#worlds"><b>มิติ</b><span>12 มิติ ตั้งแต่ใต้น้ำถึงเกม RPG 2D และห้องกล้องวงจรปิด</span></a>
+      <a href="#beings"><b>เอนทิตี</b><span>ตัวละครที่เป็นมิตร เป็นกลาง และอันตราย รวมถึงภาพหลอนที่ไม่ตรงกัน</span></a>
+      <a href="#story"><b>เนื้อเรื่อง</b><span>Aetheris Initiative บันทึก 12 ฉบับ และฉากจบ</span></a>
+      <a href="#arg"><b>ARG</b><span>รหัสสีของทีม ประตูขาว และปริศนานอกเกม</span></a>
+      <a href="#tech"><b>เทคนิค</b><span>Roblox มือถือ การเข้าถึง ข้อควรระวัง 16+</span></a>
+      <a href="#plan"><b>แผนงาน</b><span>ลำดับการสร้าง เป้าหมาย playtest และบันทึกการตัดสินใจ</span></a>
+    </div>
+  </section>
+</main>
+
+<main class="tab" id="systems" hidden>
+  <header class="ph">
+    <p class="eyebrow">Systems</p>
+    <h2>ระบบหลักของเกม</h2>
+    <p>ทุกระบบมีหน้าที่เดียวกัน คือบังคับให้ทีมต้องคุยกันและตัดสินใจร่วมกันโดยไม่มีข้อมูลครบ</p>
+    <ul class="toc">
+      <li><a href="#sys-door">โหวตประตู</a></li><li><a href="#sys-run">โครงรอบเกม</a></li><li><a href="#sys-gauge">เกจ</a></li>
+      <li><a href="#sys-stam">สตามิน่า</a></li><li><a href="#sys-inv">กระเป๋า</a></li><li><a href="#sys-role">บทบาท</a></li>
+      <li><a href="#sys-hub">พื้นที่หลัก</a></li><li><a href="#sys-mut">Mutators</a></li><li><a href="#sys-sound">เสียงและความเงียบ</a></li><li><a href="#sys-scale">6 และ 8 คน</a></li>
+    </ul>
+  </header>
+
+  <section class="sec" id="sys-door">
+    <h3>โหวตประตู: Palm Lock</h3>
+    <p class="lead">แทนที่การเหยียบแผ่นพื้น ผู้เล่นกด E ค้างที่บานประตูเพื่อแนบฝ่ามือ ประตูไม่มีตัวเลขหรือแถบโหวต ผู้เล่นรู้สถานการณ์จากเสียงหัวใจ ความอุ่นของสีประตู และลายมือที่เรืองแสงบนบาน</p>
+    <div class="grid">
+      <div class="panel"><span class="tag new">ใหม่</span><h4>แนบและยกมือ</h4><ul>
+        <li>กด E ค้าง = แนบฝ่ามือ ปล่อย = ยกมือ เปลี่ยนใจได้ตลอดจนกว่าจะล็อก</li>
+        <li>กด E แตะสั้น = เคาะประตู ทุกคนในโถงได้ยิน ใช้สื่อสารโดยไม่ต้องพิมพ์</li>
+        <li>มือถือ: แตะครั้งเดียวเพื่อสลับแนบ/ยก (ตั้งค่าได้)</li></ul></div>
+      <div class="panel"><span class="tag new">ใหม่</span><h4>การแนบกินแรง</h4><ul>
+        <li>แนบฝ่ามือกินสตามิน่า 3 ต่อวินาที มือหลุดเมื่อสตามิน่าหมด</li>
+        <li>ทีมที่ลังเลจะเหนื่อยก่อน ผู้เล่นต้องผลัดกันแนบ</li>
+        <li>ไม่มีแขน: เอนไหล่พิงประตูแทน กินสตามิน่า 2 เท่า</li></ul></div>
+      <div class="panel"><span class="tag new">ใหม่</span><h4>หัวใจของประตู</h4><ul>
+        <li>จังหวะเสียงหัวใจเร็วขึ้นตามจำนวนฝ่ามือบนบานนั้น</li>
+        <li>ถ้าสติต่ำ อาจเห็นฝ่ามือปลอมบนประตู เห็นเฉพาะคนนั้น</li>
+        <li>บางรอบหัวใจเต้นผิดจังหวะ เป็นเบาะแสให้ ARG (ดูแท็บ ARG)</li></ul></div>
+    </div>
+    <div class="tbl"><table>
+      <thead><tr><th>สถานการณ์</th><th>ผล</th></tr></thead>
+      <tbody>
+        <tr><td>ฝ่ามือเกินครึ่งของผู้ที่ยืนอยู่ ค้างครบ 3 วินาที</td><td>อีกบานล็อกทันที มีเสียงสลักปิด แล้วนับถอยหลัง 5 วินาที ยกมือในช่วงนี้ไม่ยกเลิก</td></tr>
+        <tr><td>ฝ่ามือแรกแตะประตู</td><td>เริ่มนับ 30 วินาทีสำหรับทั้งโถง</td></tr>
+        <tr><td>หมด 30 วินาทีแต่ยังไม่มีเสียงข้างมาก</td><td>บานที่มีมือมากกว่าชนะ ถ้าเสมอหรือไม่มีใครแนบเลย ประตูเลือกเอง พร้อมข้อความ “ประตูตัดสินใจแทนคุณ”</td></tr>
+        <tr><td>ผู้เล่นที่ไม่ได้แนบมือ</td><td>ถูกดึงเข้าไปพร้อมทีมเสมอ ไม่มีใครถูกทิ้ง</td></tr>
+        <tr><td>ผู้เล่นที่ล้ม (Down)</td><td>ไม่นับเป็นผู้ลงคะแนน ฐานคำนวณคือผู้ที่ยังยืนอยู่</td></tr>
+        <tr><td>ผู้ร่วมทางปลอม (ดูมิติ W-07)</td><td>มีฝ่ามือที่นับเป็นคะแนนได้ จุดสังเกต: แนบนานเท่าไรก็ไม่เหนื่อย</td></tr>
+      </tbody></table></div>
+    <div class="grid">
+      <div class="panel"><h4>ช่วยผู้เล่นตาบอดสี</h4><p>ประตูแดงมีสัญลักษณ์ ▲ ประตูฟ้ามี ● พร้อมป้ายตัวอักษรเสมอ และเสียงหัวใจของสองบานมีโทนต่างกัน</p></div>
+      <div class="panel"><h4>ภาพลวงตาของทางเลือก</h4><p>สีประตูไม่มีผลต่อมิติที่สุ่มได้ ทั้งสองบานใช้พูลเดียวกัน แต่เซิร์ฟเวอร์บันทึกลำดับสีที่ทีมเลือกไว้เป็น Run Code สำหรับ ARG</p></div>
+    </div>
+  </section>
+
+  <section class="sec" id="sys-run">
+    <h3>โครงรอบเกม</h3>
+    <div class="grid wide">
+      <div class="panel"><h4>6 มิติ จาก 12 มิติ</h4><ul>
+        <li>แต่ละรอบสุ่ม 6 มิติจากพูล 12 มิติ ผู้เล่นไม่รู้ว่าเหลืออีกกี่แห่ง</li>
+        <li>มิติที่ผ่านแล้ว (Cleared) ไม่ออกซ้ำในรอบเดียวกัน</li>
+        <li>เวลาต่อรอบประมาณ 60–75 นาที (ประมาณการ ต้อง playtest)</li></ul></div>
+      <div class="panel"><h4>กติกาสุ่มเพื่อคุมจังหวะ</h4><ul>
+        <li>มิติแรกต้องเป็นมิติระดับยาก 1–3 และไม่ใช่ห้องพัก</li>
+        <li>มิติยาก 4–5 ติดกันไม่เกิน 2 มิติ</li>
+        <li>ต่อรอบมีมิติอันตรายไม่เกิน 3 และต้องมีมิติเป็นมิตรหรือปกติอย่างน้อย 1</li>
+        <li>มิติที่เปลี่ยนรูปแบบภาพ (RPG 2D, Doom, point and click) ไม่เกิน 2 ต่อรอบ</li></ul></div>
+      <div class="panel"><h4>ประตูกลับ (Return Door)</h4><ul>
+        <li>เปิดเมื่อทำเป้าหมายของมิติเสร็จ</li>
+        <li>เมื่อคนแรกก้าวผ่าน เริ่มนับถอยหลัง 45 วินาที</li>
+        <li>คนที่ไม่ทันถูกดึงกลับด้วยกำลังของมิติ เสียไอเทมสุ่ม 1 ชิ้นและสติ 20%</li></ul></div>
+      <div class="panel"><h4>สภาวะล้มและจาง</h4><ul>
+        <li>ล้ม (Down): เลือดออกมากหรือสตามิน่าและสติหมดพร้อมกัน เพื่อนปลุกด้วยการกด E ค้าง 6 วินาที</li>
+        <li>ล้มครบ 90 วินาที = จาง (Fade) กลายเป็นผู้ชม ฟื้นที่โถงหลักรอบถัดไป เกจ 50% และได้ Echo +1</li>
+        <li>โหมด Hardcore: จางแล้วไม่ฟื้นจนจบรอบ</li></ul></div>
+    </div>
+  </section>
+
+  <section class="sec" id="sys-gauge">
+    <h3>เกจความหิว ความกระหาย และสติ</h3>
+    <p class="lead">อัตราลดด้านล่างเป็นค่าตั้งต้นสำหรับ playtest ค่าเดิมที่เสนอไว้ลดเร็วเกินไป จึงปรับให้ทีมที่เล่นดีมีเสบียงพอ</p>
+    <div class="grid">
+      <div class="panel"><span class="tag doc">จากเอกสาร</span><h4>Hunger</h4><p>ต่ำกว่า 25% สตามิน่าสูงสุดลดครึ่ง</p>
+        <div class="gauge"><div class="bar"><i style="width:62%"></i><u style="left:25%"></u></div><div class="lab"><span>0%</span><span>เส้นแดง 25%</span><span>100%</span></div></div></div>
+      <div class="panel"><span class="tag doc">จากเอกสาร</span><h4>Thirst</h4><p>ถึง 0% เกิดภาพหลอนมิติและเสียงกระซิบ</p>
+        <div class="gauge"><div class="bar"><i style="width:34%"></i><u style="left:0"></u></div><div class="lab"><span>0%</span><span></span><span>100%</span></div></div></div>
+      <div class="panel"><span class="tag new">ใหม่</span><h4>Clarity (สติ)</h4><p>ต่ำกว่า 60% เริ่มได้ยินเสียงผิดปกติ ต่ำกว่า 30% เกิดภาพหลอนบังคับ ที่ 0% อ่านเอกสารไม่ได้และภาพบิดมาก</p>
+        <div class="gauge"><div class="bar"><i style="width:48%"></i><u style="left:30%"></u></div><div class="lab"><span>0%</span><span>เส้นแดง 30%</span><span>100%</span></div></div></div>
+    </div>
+    <div class="tbl"><table>
+      <thead><tr><th>เกจ</th><th>อัตราลดปกติ</th><th>ในโถงหลัก</th><th>ตัวคูณ</th><th>ฟื้นด้วย</th></tr></thead>
+      <tbody>
+        <tr><td>Hunger</td><td>−1% ทุก 30 วินาที</td><td>×0.5</td><td class="m">วิ่ง ×1.5 · หลงทาง ×1.5</td><td class="m">อาหาร</td></tr>
+        <tr><td>Thirst</td><td>−1% ทุก 20 วินาที</td><td>×0.5</td><td class="m">วิ่ง ×1.5 · สแกน ×1.5 · ดำน้ำ ×2</td><td class="m">น้ำ</td></tr>
+        <tr><td>Clarity</td><td>คงที่ จนกว่าจะมีตัวกดดัน</td><td>คงที่</td><td class="m">อยู่ลำพังในที่มืด −1% ต่อ 6 วินาที · Thirst 0% −1% ต่อ 4 วินาที · จ้องความผิดปกติ −2%</td><td class="m">อยู่ใกล้เพื่อน 2 คนขึ้นไปในที่สว่าง +1% ต่อ 3 วินาที · Sync Gaze</td></tr>
+      </tbody></table></div>
+    <div class="callout"><b>งบเสบียงต่อมิติ (ทีม 6 คน)</b><p>สมมติมิติละ 8 นาที และอยู่โถงหลัก 1.5 นาที ผู้เล่นหนึ่งคนใช้ Hunger ราว 17.5% และ Thirst ราว 26% ทีม 6 คนใช้ Hunger ราว 105% และ Thirst ราว 156% ค่าตั้งต้นที่วางคือพิซซ่า 1–2 ถาด น้ำ 3–5 ขวด อาหารกระป๋อง 2–4 กระป๋องต่อมิติ ปรับตามประเภทมิติ เป้าหมายคือทีมที่เล่นดีจบรอบด้วยเสบียงเหลือ 10–20%</p></div>
+  </section>
+
+  <section class="sec" id="sys-stam">
+    <h3>สตามิน่า</h3>
+    <p class="lead">ระบบที่ยังไม่มีในเอกสารเดิม ใช้ร่วมกับการแนบฝ่ามือ การแบกเพื่อน และการบาดเจ็บ ทำให้ทุกการกระทำมีราคา</p>
+    <div class="grid wide">
+      <div class="tbl"><table style="min-width:360px;"><thead><tr><th>การกระทำ</th><th>สตามิน่า (ค่าเต็ม 100)</th></tr></thead><tbody>
+        <tr><td>วิ่ง</td><td>−12 ต่อวินาที</td></tr><tr><td>กระโดด</td><td>−8 ต่อครั้ง</td></tr>
+        <tr><td>แนบฝ่ามือที่ประตู</td><td>−3 ต่อวินาที (ไหล่ −6)</td></tr><tr><td>แบกเพื่อน</td><td>−1.5 ต่อวินาที และฟื้นช้าลงครึ่งหนึ่ง</td></tr>
+        <tr><td>ว่ายและดำน้ำ</td><td>−5 ต่อวินาที</td></tr><tr><td>ปีนบันไดหรือเชือก</td><td>−4 ต่อวินาที</td></tr>
+        <tr><td>ฟื้นฟู</td><td>+10 ต่อวินาที หลังหยุดนิ่ง 1 วินาที</td></tr></tbody></table></div>
+      <div class="panel"><h4>ตัวปรับ</h4><ul>
+        <li>Hunger ต่ำกว่า 25%: สตามิน่าสูงสุดลดครึ่ง</li>
+        <li>Thirst 0%: อัตราฟื้นลดครึ่งหนึ่ง</li>
+        <li>ขาบาดเจ็บ: วิ่งและกระโดดไม่ได้ จึงไม่กินสตามิน่าส่วนนี้ แต่ไม่ได้ฟื้นเร็วขึ้น</li>
+        <li>สตามิน่า 0%: หอบ ได้ยินเสียงหายใจดังเท่ากับเสียงวิ่ง ซึ่งดึงเอนทิตีที่ฟังเสียง</li></ul></div>
+    </div>
+  </section>
+
+  <section class="sec" id="sys-inv">
+    <h3>กระเป๋าตาราง 4×3</h3>
+    <div class="inv-wrap">
+      <div>
+        <div class="inv" role="img" aria-label="ตัวอย่างกระเป๋า 4 คูณ 3 ช่อง ใช้ไป 11 ช่อง">
+          <div class="cell food" style="grid-column:1/3; grid-row:1/3;">พิซซ่า 2×2</div>
+          <div class="cell water" style="grid-column:3; grid-row:1/3;">ขวดน้ำ 1×2</div>
+          <div class="cell food" style="grid-column:4; grid-row:1;">กระป๋อง</div>
+          <div class="cell empty" style="grid-column:4; grid-row:2;">ว่าง</div>
+          <div class="cell tool" style="grid-column:1/3; grid-row:3;">LiDAR 1×2</div>
+          <div class="cell tool" style="grid-column:3; grid-row:3;">แบตเตอรี่</div>
+          <div class="cell note" style="grid-column:4; grid-row:3;">ผ้าพันแผล</div>
+        </div>
+        <p class="fine" style="margin-top:8px;">12 ช่อง ใช้ 11 ช่อง กด R เพื่อหมุนไอเทม บนมือถือแตะไอเทมแล้วแตะช่อง (ไม่ต้องลาก)</p>
+      </div>
+      <div class="tbl"><table style="min-width:520px;">
+        <thead><tr><th>ไอเทม</th><th>ขนาด</th><th>ผล</th><th>การถือ</th></tr></thead>
+        <tbody>
+          <tr><td>พิซซ่า</td><td>2×2</td><td>Hunger +80% แตกเป็น 4 ชิ้น 1×1 (+20% ต่อชิ้น) ได้ตั้งแต่เก็บ</td><td class="m">สองมือ</td></tr>
+          <tr><td>ขวดน้ำ</td><td>1×2</td><td>Thirst +50% ดื่มแบ่งได้ 2 ครั้ง</td><td class="m">มือเดียว</td></tr>
+          <tr><td>กระป๋อง / ขนมปัง</td><td>1×1</td><td>Hunger +30% เปิดกระป๋อง 3 วินาที มีเสียงดัง</td><td class="m">มือเดียว</td></tr>
+          <tr><td>เครื่องสแกน LiDAR</td><td>1×2</td><td>ใช้ในมิติมืด ดูมิติ W-02</td><td class="m">สองมือ</td></tr>
+          <tr><td>แบตเตอรี่</td><td>1×1</td><td>ชาร์จ LiDAR หรือไฟฉาย</td><td class="m">มือเดียว</td></tr>
+          <tr><td>ไฟฉาย / แท่งเรืองแสง / ชอล์ก</td><td>1×1</td><td>ส่อง / สว่าง 90 วินาที ใช้เป็นจุดนัด / ทำเครื่องหมายบนผนัง</td><td class="m">มือเดียว (ขวา)</td></tr>
+          <tr><td>ผ้าพันแผล ยาหยอดตา สายรัดห้ามเลือด ยาแก้ปวด</td><td>1×1</td><td>รักษาทีละส่วน ดูแท็บร่างกาย</td><td class="m">มือเดียว</td></tr>
+          <tr><td>ชุดปฐมพยาบาล</td><td>1×2</td><td>ใช้ไอเทมรักษาทั่วไปได้ 3 ครั้ง</td><td class="m">สองมือ</td></tr>
+          <tr><td>กระดาษเบาะแส</td><td>1×1</td><td>อ่านแล้วเข้าสมุดบันทึก (Journal) ไม่กินช่อง ทิ้งกระดาษคืนช่องได้</td><td class="m">มือเดียว</td></tr>
+        </tbody></table></div>
+    </div>
+    <div class="grid">
+      <div class="panel"><h4>แลกเปลี่ยน</h4><p>ดร็อปลงพื้นหรือยื่นให้เพื่อนโดยกด E ที่ตัวเพื่อน คนที่ไม่มีมือเปิดช่อง “ป้อน” ให้เพื่อนกินดื่มแทนได้</p></div>
+      <div class="panel"><h4>กันปั๊มไอเทม</h4><p>เซิร์ฟเวอร์เป็นเจ้าของข้อมูลกระเป๋า ไคลเอนต์ส่งเพียงคำขอย้ายไอเทม ดูรายละเอียดในแท็บเทคนิค</p></div>
+    </div>
+  </section>
+
+  <section class="sec" id="sys-role">
+    <h3>บทบาท</h3>
+    <p class="lead">เลือกในโถงก่อนโหวตประตูแรก ซ้ำกันได้ ทีมไม่จำเป็นต้องมีครบ ความต่างเล็กพอที่จะไม่ทำให้ใครเป็นตัวหลักที่ขาดไม่ได้</p>
+    <div class="grid">
+      <div class="panel"><h4>Scout</h4><p>LiDAR กินแบตน้อยลง 25% และสแกนได้ไกลขึ้น เหมาะกับคนที่ต้องแบกเครื่องสแกนและแบตเตอรี่</p></div>
+      <div class="panel"><h4>Support</h4><p>กระเป๋า 14 ช่องแทน 12 แต่วิ่งช้าลง 5% รับหน้าที่แบกอาหารและน้ำของทีม</p></div>
+      <div class="panel"><h4>Medic</h4><p>ปลุกคนล้มเร็วขึ้น 2 เท่า (3 วินาที) และรักษาด้วยเวลาน้อยลงครึ่งหนึ่ง</p></div>
+      <div class="panel"><h4>Archivist</h4><p>เห็นขอบเรืองของความผิดปกติในระยะใกล้ และอ่านเอกสารได้ละเอียดกว่าคนอื่นหนึ่งบรรทัด</p></div>
+    </div>
+  </section>
+
+  <section class="sec" id="sys-hub">
+    <h3>พื้นที่หลัก: โถงที่เปลี่ยนไปทุกครั้งที่กลับมา</h3>
+    <p class="lead">โถงเป็นพื้นที่ปลอดภัยที่ค่อยๆ ผิดปกติ เกจลดครึ่งอัตรา มีตู้เก็บเสบียงที่เติมของ 2 ชิ้นสุ่มหลังผ่านแต่ละมิติ มีโต๊ะข่าวสำหรับติดกระดาษเบาะแส และเทอร์มินัลที่ผูกกับ ARG</p>
+    <div class="tbl"><table>
+      <thead><tr><th>ผ่านแล้ว</th><th>สิ่งที่เปลี่ยนในโถง</th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td class="m">โถงสะอาด ไฟนิ่ง ประตูแดงและฟ้า นาฬิกาติดผนังเดินปกติ</td></tr>
+        <tr><td>1</td><td class="m">โปสเตอร์ความปลอดภัยของ Aetheris ขึ้นบนผนัง ตัวอักษรบางตัวเลือน</td></tr>
+        <tr><td>2</td><td class="m">ลำโพงประกาศนับถอยหลังจากสิบ แต่ไม่ถึงศูนย์ นาฬิกาหยุดที่ 3:33</td></tr>
+        <tr><td>3</td><td class="m">ผนังยืดออก มีเส้นขอบประตูบานที่สามจางๆ (ประตูขาว ดู ARG) Mutators เริ่มทำงาน</td></tr>
+        <tr><td>4</td><td class="m">เงาของผู้เล่นบนผนังตามหลังช้ากว่าตัวเล็กน้อย</td></tr>
+        <tr><td>5</td><td class="m">เมื่อไฟกะพริบ สีของประตูสลับกันชั่วขณะ (สัญลักษณ์ ▲ ● ไม่สลับ)</td></tr>
+        <tr><td>6</td><td class="m">ประตูแดงกับฟ้าสลายและหลอมเป็นประตูม่วง</td></tr>
+      </tbody></table></div>
+  </section>
+
+  <section class="sec" id="sys-mut">
+    <h3>Mutators: ตัวแปรสุ่มของมิติ</h3>
+    <p class="lead">เริ่มทำงานตั้งแต่มิติที่ 3 ครั้งละ 1 อย่าง ให้ผู้เล่นที่เคยเล่นมิติเดิมยังเจอสิ่งที่ไม่คาดคิด</p>
+    <div class="grid">
+      <div class="panel"><h4>ไฟตก</h4><p>ไฟฉายและแสงสว่างในมิติลดระยะ 30%</p></div>
+      <div class="panel"><h4>เสบียงแห้ง</h4><p>จำนวนอาหารและน้ำที่เจอลด 25%</p></div>
+      <div class="panel"><h4>เสียงสะท้อน</h4><p>เสียงทุกชนิดดังไกลเป็นสองเท่า รวมถึงเสียงที่เอนทิตีได้ยิน</p></div>
+      <div class="panel"><h4>ประตูกลับช้า</h4><p>นับถอยหลังหลังคนแรกก้าวผ่านเหลือ 30 วินาที</p></div>
+      <div class="panel"><h4>ชั่วโมงเงียบ</h4><p>แชตข้อความปิด 2 นาที ต้องสื่อสารด้วยการเคาะและท่าทาง</p></div>
+      <div class="panel"><h4>ของหาย</h4><p>ตอนเข้ามิติ ไอเทมสุ่ม 1 ชิ้นของทุกคนถูกวางไว้ที่จุดสุ่มในมิติ</p></div>
+    </div>
+  </section>
+
+  <section class="sec" id="sys-sound">
+    <h3>เสียงและความเงียบ</h3>
+    <p class="lead">ทุกมิติมีเพลงพื้นหลังของตัวเอง เสียงเพลงไม่ได้เป็นแค่บรรยากาศ มันเป็นสิ่งที่ผู้เล่นเริ่มพึ่งพา แล้วเกมจะดึงมันออกโดยไม่บอกกล่าว</p>
+    <div class="grid wide">
+      <div class="panel"><span class="tag new">ใหม่</span><h4>Silence Director</h4><ul>
+        <li>เพลงแต่ละมิติแยกเป็นเลเยอร์ (พื้น ทำนอง จังหวะ) ถอดออกทีละชั้นได้</li>
+        <li>ความเงียบมาโดยไม่มีสัญญาณ ช่วงเงียบยาว 8–25 วินาที</li>
+        <li>ความเงียบกว่าครึ่งหนึ่งไม่มีเหตุการณ์ตามมา เพื่อให้ผู้เล่นไว้ใจไม่ได้</li></ul></div>
+      <div class="panel"><span class="tag new">ใหม่</span><h4>เพลงที่อยู่ในโลก</h4><ul>
+        <li>บางมิติมีเครื่องเล่นหรือวิทยุที่เปิดเพลงจริง ผู้เล่นปิดได้แต่เสียงจะดังสะท้อนไปถึงเอนทิตี</li>
+        <li>เพลงของมิติหยุดกลางประโยคเมื่อมีสิ่งผิดปกติอยู่ใกล้ในระยะ 20 สตั๊ด</li>
+        <li>เพลงของโถงหลักผิดเพี้ยนตามจำนวนมิติที่ผ่าน</li></ul></div>
+    </div>
+  </section>
+
+  <section class="sec" id="sys-scale">
+    <h3>6 คนและ 8 คน</h3>
+    <p class="lead">เซิร์ฟเวอร์หลักรับ 6 คน ผู้ซื้อ Game Pass เปิดห้อง 8 คนได้ ห้อง 8 คนไม่ควรง่ายกว่า มีแค่ทีมใหญ่ขึ้นและภาระมากขึ้น</p>
+    <div class="tbl"><table>
+      <thead><tr><th></th><th>6 คน (ปกติ)</th><th>8 คน (Game Pass)</th></tr></thead>
+      <tbody>
+        <tr><td>เสียงข้างมาก</td><td>4 คน</td><td>5 คน</td></tr>
+        <tr><td>เสบียงต่อมิติ</td><td class="m">ตามงบด้านบน</td><td class="m">×1.3 (ไม่ถึง ×1.33 เพื่อให้ตึงมือกว่าเล็กน้อย)</td></tr>
+        <tr><td>เอนทิตีและเหตุการณ์</td><td class="m">มาตรฐาน</td><td class="m">+1 เหตุการณ์ต่อมิติ</td></tr>
+        <tr><td>ผู้ร่วมทางปลอม (W-07)</td><td class="m">คนที่ 7</td><td class="m">คนที่ 9</td></tr>
+        <tr><td>ผู้เล่นหลุดกลางเกม</td><td class="m" colspan="2">ระบบลดจำนวนเสียงข้างมากและเสบียงตามจำนวนคนที่เหลือ ไม่มีบอตมาแทน</td></tr>
+      </tbody></table></div>
+    <p class="fine">Game Pass ซื้อขนาดห้อง ไม่ซื้อไอเทมหรือความได้เปรียบ ไม่มีสถิติหรือไอเทมที่ขายเป็นพลัง</p>
+  </section>
+</main>
+
+<main class="tab" id="body" hidden>
+  <header class="ph">
+    <p class="eyebrow">Body System</p>
+    <h2>ร่างกายที่เสียไปได้</h2>
+    <p>ไม่มีแถบเลือดเดียว ร่างกายแบ่งเป็นห้าส่วน แต่ละส่วนบาดเจ็บหรือขาดได้ และรักษาทีละส่วน สิ่งที่ขาดไปแล้วไม่กลับมาด้วยไอเทมธรรมดา</p>
+    <ul class="toc">
+      <li><a href="#body-parts">ห้าส่วนของร่างกาย</a></li><li><a href="#body-heal">การรักษา</a></li><li><a href="#body-carry">แบกเพื่อน</a></li>
+      <li><a href="#body-incident">เหตุการณ์</a></li><li><a href="#body-rules">กติกาความยุติธรรม</a></li>
+    </ul>
+  </header>
+
+  <section class="sec" id="body-parts">
+    <h3>ห้าส่วนของร่างกาย</h3>
+    <div class="tbl"><table style="min-width:760px;">
+      <thead><tr><th>ส่วน</th><th>บาดเจ็บ (Injured)</th><th>ขาด (Lost)</th></tr></thead>
+      <tbody>
+        <tr><td>ตา</td><td>ตาบอด จอมืดเกือบหมด เห็นเฉพาะวงคลื่นเสียงที่ขยายออกจากแหล่งเสียง และเงาโครงร่างของสิ่งที่เคลื่อนไหว อ่านเอกสารและมองสัญลักษณ์ไม่ได้</td><td class="m">ไม่มีสถานะขาด ตาบอดเป็นอาการที่รักษาได้เสมอ (ธีมของเกมนี้คือผู้เล่นยังเล่นต่อได้)</td></tr>
+        <tr><td>แขนซ้าย</td><td>ถือไอเทมสองมือไม่ได้ ถือไอเทมมือเดียวด้วยมือขวาได้ตามปกติ</td><td class="m">เหมือนบาดเจ็บ และปีนบันไดหรือเชือกไม่ได้</td></tr>
+        <tr><td>แขนขวา</td><td>ถือหรือใช้เครื่องมือด้วยมือหลักไม่ได้ (ไฟฉาย LiDAR กล้อง ชอล์ก) ถือสองมือไม่ได้ กินดื่มด้วยมือซ้ายได้แต่ช้า 2 เท่า</td><td class="m">เหมือนบาดเจ็บ ถ้าแขนซ้ายขาดด้วย เปิดประตูหรือกดปุ่มไม่ได้</td></tr>
+        <tr><td>ขา</td><td>วิ่งไม่ได้ กระโดดไม่ได้ เดินช้าลงเหลือ 85%</td><td class="m">ขาข้างเดียว: กระโดดขาเดียวด้วยความเร็ว 50% ปีนไม่ได้ · ขาสองข้าง: คลานด้วย 30% หรือถูกแบก</td></tr>
+        <tr><td>ลำตัว</td><td>ไม่มีสถานะบาดเจ็บแยก ใช้เป็นตัวบอกเลือดออก</td><td class="m">เลือดออกเกิดทันทีเมื่อมีอวัยวะขาด หรือเหตุการณ์รุนแรง ไม่ห้ามเลือดใน 120 วินาทีจะล้มและตาย (จาง)</td></tr>
+      </tbody></table></div>
+    <div class="grid">
+      <div class="panel"><span class="tag new">ใหม่</span><h4>ไม่มีแขนสองข้าง</h4><p>เปิดประตูธรรมดาไม่ได้ แต่ใช้ไหล่ดันประตูที่ไม่ล็อกได้ ช้าลง 3 เท่า เปิดประตูล็อก กดปุ่ม และกดลิฟต์ไม่ได้ ต้องให้เพื่อนทำให้</p></div>
+      <div class="panel"><span class="tag new">ใหม่</span><h4>ป้อนอาหาร</h4><p>คนไม่มีมือกินเองไม่ได้ เพื่อนกด E ที่ตัวเขาเพื่อป้อนอาหารหรือน้ำ ใช้เวลา 3 วินาที</p></div>
+      <div class="panel"><span class="tag new">ใหม่</span><h4>ตาบอดแต่ได้ยิน</h4><p>ผู้เล่นตาบอดเป็นผู้ฟังที่ดีที่สุดของทีม ได้ยินตำแหน่งเอนทิตีชัดกว่า 30% และเห็นเงาของสิ่งที่ขยับ</p></div>
+    </div>
+    <p class="fine">ยืนยันแล้ว: แขนขวาเป็นมือหลัก ถ้าบาดเจ็บจะถือไฟฉายหรือเครื่องสแกนไม่ได้ แต่กินดื่มด้วยมือซ้ายได้ช้าลง</p>
+  </section>
+
+  <section class="sec" id="body-heal">
+    <h3>การรักษาทีละส่วน</h3>
+    <p class="lead">เปิดวงล้อร่างกาย เลือกส่วน เลือกไอเทม ผู้รักษาต้องหยุดนิ่ง 4–8 วินาที ไอเทมหนึ่งชิ้นรักษาหนึ่งส่วน ไม่รักษาพร้อมกัน</p>
+    <div class="tbl"><table style="min-width:700px;">
+      <thead><tr><th>ไอเทม</th><th>ใช้กับ</th><th>ผล</th><th>ที่มา</th></tr></thead>
+      <tbody>
+        <tr><td>ผ้าพันแผล</td><td>แขน ขา (บาดเจ็บ)</td><td>กลับเป็นปกติ</td><td class="m">ทั่วไป</td></tr>
+        <tr><td>ยาหยอดตา</td><td>ตา</td><td>หายตาบอด</td><td class="m">ทั่วไป</td></tr>
+        <tr><td>สายรัดห้ามเลือด</td><td>อวัยวะที่ขาด</td><td>หยุดเลือด ไม่ได้ทำให้อวัยวะกลับมา</td><td class="m">ทั่วไป</td></tr>
+        <tr><td>ยาแก้ปวด</td><td>ส่วนที่บาดเจ็บ</td><td>ซ่อนอาการ 60 วินาที ไม่ได้รักษา</td><td class="m">ทั่วไป</td></tr>
+        <tr><td>แขนเทียม / ขาเทียม Aetheris</td><td>อวัยวะที่ขาด</td><td>กู้การใช้งาน ทำงานได้ 90% และมองเห็นว่าเป็นของเทียม</td><td class="m">พบน้อยมาก หรือมิติเฉพาะ</td></tr>
+        <tr><td>เก้าอี้ผ่าตัด (W-08)</td><td>อวัยวะที่ขาด</td><td>ติดตั้งชิ้นส่วนเทียมที่ผู้เล่นพกมา 1 ครั้งต่อรอบ</td><td class="m">มิติห้องพัก</td></tr>
+        <tr><td>จุดเซฟ (W-09)</td><td>อวัยวะที่ขาด</td><td>ฟื้นอวัยวะเต็มรูป แลกกับการลบบันทึกในสมุด Journal 1 รายการ</td><td class="m">มิติหมู่บ้าน 2D</td></tr>
+      </tbody></table></div>
+    <div class="callout"><b>หลักของการฟื้น</b><p>ของธรรมดาแก้อาการ ไม่คืนอวัยวะ การคืนอวัยวะต้องแลกด้วยของหายาก ของเฉพาะมิติ หรือข้อมูลของเรื่อง ผู้เล่นที่เสียแขนจึงมีเรื่องให้เล่าและมีเหตุผลให้ทีมช่วยกัน</p></div>
+  </section>
+
+  <section class="sec" id="body-carry">
+    <h3>แบกเพื่อนขึ้นหลัง</h3>
+    <div class="grid">
+      <div class="panel"><span class="tag new">ใหม่</span><h4>คนแบก</h4><ul>
+        <li>กด E ที่เพื่อนที่ล้มหรือเดินไม่ได้เพื่อแบก</li>
+        <li>เดินช้าลงเหลือ 70% วิ่งและกระโดดไม่ได้</li>
+        <li>ถือไอเทมด้วยมือไม่ได้ สตามิน่าฟื้นช้าลงครึ่งหนึ่ง</li></ul></div>
+      <div class="panel"><span class="tag new">ใหม่</span><h4>คนถูกแบก</h4><ul>
+        <li>ใช้ไอเทมในกระเป๋าของตัวเองได้ เช่น LiDAR ไฟฉาย</li>
+        <li>ชี้ทางด้วยการแปะหมุดบนมือถือหรือเมาส์</li>
+        <li>เลือดออกต่อเนื่อง การแบกไม่หยุดเวลาล้มของตัวนับ</li></ul></div>
+      <div class="panel"><span class="tag new">ใหม่</span><h4>ตาและขา</h4><p>คนตาบอดแบกคนขาขาด คนหนึ่งเดินได้ อีกคนมองเห็น และทั้งสองต้องคุยกันตลอด เป็นการผสมที่ระบบรองรับโดยตั้งใจ</p></div>
+    </div>
+  </section>
+
+  <section class="sec" id="body-incident">
+    <h3>เหตุการณ์ที่ทำให้บาดเจ็บ</h3>
+    <div class="tbl"><table style="min-width:780px;">
+      <thead><tr><th>เหตุการณ์</th><th>มิติ</th><th>สัญญาณเตือน</th><th>ผล</th><th>หลีกเลี่ยง</th></tr></thead>
+      <tbody>
+        <tr><td>เพดานถล่ม</td><td class="m">W-03 W-04</td><td class="m">สั่นและฝุ่น 3 วินาที</td><td class="m">ขาบาดเจ็บ ขาดถ้าติดใต้เศษ</td><td class="m">ผลักหรือดึงเพื่อนออก</td></tr>
+        <tr><td>ประตูหนีบ</td><td class="m">หลายมิติ</td><td class="m">เสียงลมดูด 2 วินาที</td><td class="m">แขนบาดเจ็บ ขาดถ้าไม่ดึงกลับ</td><td class="m">กด E ค้างเพื่อถ่วงประตู</td></tr>
+        <tr><td>แสงวาบ</td><td class="m">W-12</td><td class="m">เสียงแหลมสูง 2 วินาที</td><td class="m">ตาบอด</td><td class="m">กด C เพื่อหลับตา</td></tr>
+        <tr><td>ท่อระเบิดแรงดัน</td><td class="m">W-01</td><td class="m">น้ำสั่นและฟอง</td><td class="m">แขนบาดเจ็บ</td><td class="m">ถอยห่างสามก้าว</td></tr>
+        <tr><td>เครื่องปั๊มดูดแขน</td><td class="m">W-01</td><td class="m">เสียงเครื่องสะดุด</td><td class="m">แขนขาด (พบน้อย)</td><td class="m">ทำมินิเกมตามจังหวะ</td></tr>
+        <tr><td>พุ่งชน</td><td class="m">W-06 W-10</td><td class="m">เสียงหายใจและฝีเท้า</td><td class="m">ขาหรือแขนบาดเจ็บ</td><td class="m">ดูแท็บเอนทิตี</td></tr>
+        <tr><td>คลิกผิดจุด</td><td class="m">W-11</td><td class="m">เสียงเครื่องกลก่อนคลิก</td><td class="m">แขนถูกหนีบ</td><td class="m">อ่านคำใบ้ของเพื่อน</td></tr>
+        <tr><td>พลัดตก</td><td class="m">W-04</td><td class="m">พื้นห้องสั่นและเอียง</td><td class="m">ขาบาดเจ็บ</td><td class="m">จับราวหรือมือเพื่อน</td></tr>
+      </tbody></table></div>
+  </section>
+
+  <section class="sec" id="body-rules">
+    <h3>กติกาความยุติธรรม</h3>
+    <div class="grid">
+      <div class="panel"><h4>แจ้งเตือนเสมอ</h4><p>ทุกเหตุการณ์มีสัญญาณก่อนเกิด 2–3 วินาที ไม่มีอวัยวะขาดแบบกะทันหัน</p></div>
+      <div class="panel"><h4>ช่วงผ่อนปรน</h4><p>2 มิติแรก ระบบทำให้บาดเจ็บได้แต่ไม่ทำให้อวัยวะขาด ให้ผู้เล่นเรียนรู้ก่อน</p></div>
+      <div class="panel"><h4>ตัวเลือกความรุนแรง</h4><p>สวิตช์ปิดภาพเลือดและสไตล์การแสดงผลรุนแรง เหลือเพียงสัญลักษณ์อวัยวะและเสียง เป็นการตั้งค่าเริ่มต้นสำหรับการเข้าถึงด้วย</p></div>
+      <div class="panel"><h4>สมัครใจ</h4><p>ผู้เล่นเสนอเสียสละอวัยวะเพื่อแลกของบางอย่างได้ในบางมิติ ไม่มีกลไกบังคับตัดอวัยวะ</p></div>
+    </div>
+  </section>
+</main>
+
+<main class="tab" id="worlds" hidden>
+  <header class="ph">
+    <p class="eyebrow">Dimensions</p>
+    <h2>12 มิติ ไม่มีสองที่ที่เล่นเหมือนกัน</h2>
+    <p>แต่ละมิติเปลี่ยนวิธีเล่นทั้งระบบ บางมิติเปลี่ยนแม้แต่ประเภทของเกม ทุกมิติยังคงกฎเหล็กข้อเดียวกัน คือร่างกาย เกจ และไอเทมของผู้เล่นยังเป็นของเดิมเสมอ</p>
+  </header>
+  <div class="grid">
+    <div class="panel"><h4>กฎเหล็กข้ามมิติ</h4><ul><li>เกจ ร่างกาย และกระเป๋าเดิมเสมอ แม้ภาพจะเปลี่ยนเป็น 2D</li><li>ทุกมิติมีประตูกลับและเอกสารหนึ่งฉบับ</li><li>ภาพหลอนไม่ทำร้ายจริง ดูแท็บเอนทิตี</li></ul></div>
+    <div class="panel"><h4>น้ำเสียงของมิติ</h4><div class="tags"><span class="tag hot">อันตราย</span><span class="tag cool">เป็นมิตร</span><span class="tag new">แปลก</span><span class="tag doc">ปกติ</span></div><p>ต่อรอบมีมิติอันตรายไม่เกิน 3 และมีมิติเป็นมิตรหรือปกติอย่างน้อย 1</p></div>
+    <div class="panel"><h4>การเปลี่ยนรูปแบบภาพ</h4><p>W-09 เกม RPG 2D · W-10 เกมยิงมุมมองบุคคลที่หนึ่งยุคเก่า · W-11 เกม point and click ใช้กล้องคงที่ ไม่เกิน 2 มิติต่อรอบ</p></div>
+  </div>
+  <div class="grid wide" id="world-list"></div>
+</main>
+
+<main class="tab" id="beings" hidden>
+  <header class="ph">
+    <p class="eyebrow">Entities & Perception</p>
+    <h2>เอนทิตีและการรับรู้ที่ไม่ตรงกัน</h2>
+    <p>ผู้ร้ายของเกมนี้ไม่วิ่งไล่ตลอด บางตัวเป็นมิตร บางตัวไม่ทำอะไรถ้าไม่ถูกยั่ว บางตัวพุ่งเป็นช่วงสั้นๆ แล้วเลิก และบางตัวตามคุณข้ามมิติ</p>
+    <ul class="toc"><li><a href="#be-ent">เอนทิตี</a></li><li><a href="#be-lens">การรับรู้ที่ไม่ตรงกัน</a></li></ul>
+  </header>
+  <section class="sec" id="be-ent">
+    <h3>ทะเบียนเอนทิตี</h3>
+    <div class="grid wide" id="ent-list"></div>
+  </section>
+  <section class="sec" id="be-lens">
+    <h3>เลนส์: ทุกคนเห็นไม่เหมือนกัน</h3>
+    <p class="lead">ตอนเริ่มบางมิติ ผู้เล่น 1–2 คนจะได้เลนส์สุ่มติดตัวไปจนจบมิติ หรือติดมาเองเมื่อสติต่ำกว่า 60% ทำให้ทีมต้องถามกันว่าใครเห็นอะไร</p>
+    <div class="grid" id="lens-list"></div>
+    <div class="grid">
+      <div class="panel"><span class="tag new">ใหม่</span><h4>Sync Gaze</h4><p>ผู้เล่นสองคนมองหน้ากันตรงๆ ในที่สว่าง 3 วินาที ภาพหลอนของทั้งคู่หายไป 60 วินาที และสติ +10% ต้องมองตากันจริง ไม่ใช่แค่ยืนใกล้</p></div>
+      <div class="panel"><span class="tag new">ใหม่</span><h4>กฎความยุติธรรม</h4><p>ภาพหลอนโกหกได้เฉพาะภาพ ไม่ทำร้ายจริง และไม่ปิดบังอันตรายจริงจนไม่มีทางรู้ เสียงเตือนของอันตรายจริงจะไม่ถูกบิดเบือน</p></div>
+    </div>
+  </section>
+</main>
+
+<main class="tab" id="story" hidden>
+  <header class="ph">
+    <p class="eyebrow">Story</p>
+    <h2>Aetheris Initiative และห้องที่ไม่มีทางออก</h2>
+    <p>เรื่องไม่ถูกเล่าตรงๆ ผู้เล่นประกอบเองจากบันทึก 12 ฉบับ เสียง และความผิดปกติของโถง จนกว่าประตูม่วงจะเปิด</p>
+    <ul class="toc"><li><a href="#st-truth">ความจริงสามชั้น</a></li><li><a href="#st-logs">บันทึก 12 ฉบับ</a></li><li><a href="#st-cut">คัทซีนประตูม่วง</a></li><li><a href="#st-end">ฉากจบ</a></li></ul>
+  </header>
+
+  <section class="sec" id="st-truth">
+    <h3>ความจริงสามชั้น</h3>
+    <div class="grid">
+      <div class="panel"><span class="tag doc">ชั้นที่ 1 · สิ่งที่ผู้เล่นคิด</span><p>ผู้เล่นเป็นวิศวกรสำรวจมิติของ Aetheris Initiative ที่ถูกส่งเข้าไปใน The Threshold พื้นที่รอยต่อระหว่างมิติ และกำลังหาทางออก</p></div>
+      <div class="panel"><span class="tag doc">ชั้นที่ 2 · สิ่งที่คัทซีนเผย</span><p>โถงและประตูแดงฟ้าเป็น Consciousness Containment Unit ที่แขวนอยู่ในความว่างเปล่า ความหิว ภาพหลอน และการสุ่มประตู คือการทดลองทางจิตวิทยา</p></div>
+      <div class="panel"><span class="tag new">ชั้นที่ 3 · สิ่งที่ ARG เผย</span><p>ผลการทดลองไม่ใช่ว่าใครรอด ผู้ทดลองต้องการรู้ว่าผู้เข้าร่วมจะยังเลือกต่อไปไหม เมื่อรู้แล้วว่าประตูทั้งสองให้ผลเหมือนกัน บันทึกเหล่านี้เป็นของรอบก่อนหน้า ผู้เล่นปัจจุบันเป็นรอบที่ไม่ใช่รอบแรก</p></div>
+    </div>
+    <div class="callout"><b>ลวดลายซ้ำของเรื่อง</b><p>เวลา 3:33 ปรากฏบนนาฬิกาในโถง ใบเสร็จในร้านสะดวกซื้อ และหน้าจอเทอร์มินัล ผู้เล่นที่สังเกตจะเห็นว่าทุกที่ค้างอยู่ที่นาทีเดียวกัน</p></div>
+  </section>
+
+  <section class="sec" id="st-logs">
+    <h3>บันทึก 12 ฉบับ</h3>
+    <p class="lead">แต่ละมิติมีบันทึกหนึ่งฉบับของวิศวกรคนละคน ในหนึ่งรอบผู้เล่นจะเจอ 6 ฉบับ ชุมชนต้องช่วยกันรวมให้ครบ ฉบับละไม่เกิน 30 คำ</p>
+    <div class="grid" id="log-list"></div>
+  </section>
+
+  <section class="sec" id="st-cut">
+    <h3>คัทซีนประตูม่วง</h3>
+    <div class="grid">
+      <div class="panel"><span class="tag doc">Scene 1 · Convergence</span><p>ภาพเปลี่ยนเป็นม่วงสลับดำ โถงและประตูที่ทีมใช้วนเวียนเป็นกล่องจำลองขนาดใหญ่ที่แขวนกลางความว่างเปล่า</p></div>
+      <div class="panel"><span class="tag doc">Scene 2 · Realization</span><p>เผยว่าอาการทั้งหมดคือการทดลอง ตอนนี้เพิ่มเสียงของดร.เรเวน (E-08) อ่านผลการทดลองรอบนี้ พร้อมจำนวน Echo</p></div>
+      <div class="panel"><span class="tag doc">Scene 3 · Clue Drop</span><p>กล้องซูมจอมอนิเตอร์ แสดง Run Code และรหัสที่ต้องถอดความ (ไม่ใช้ QR หรือลิงก์ตรง) สำหรับผู้เล่นสาย ARG</p></div>
+    </div>
+  </section>
+
+  <section class="sec" id="st-end">
+    <h3>ฉากจบ</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>ฉากจบ</th><th>เงื่อนไข</th><th>สิ่งที่เห็น</th></tr></thead>
+      <tbody>
+        <tr><td>Containment</td><td class="m">ปกติ ผ่านประตูม่วง</td><td class="m">Scene 1–3 ตามข้างบน</td></tr>
+        <tr><td>Echo</td><td class="m">ผู้เล่นจางรวมกันตั้งแต่ 8 ครั้งขึ้นไป</td><td class="m">มีเงาจางๆ ของผู้ที่หายไปยืนอยู่ในกล่องจำลอง</td></tr>
+        <tr><td>White Door</td><td class="m">ใส่รหัสที่เทอร์มินัลในโถงก่อนเปิดประตูม่วง</td><td class="m">ห้องสีขาว และบันทึกเสียงของผู้ร่วมทางที่เกินมา เป็นประตูสู่ ARG ลึกขึ้น</td></tr>
+        <tr><td>True Ending</td><td class="m">นอกเกม ตาม ARG</td><td class="m">เทปบันทึก Cycle Zero และข้อความสุดท้าย</td></tr>
+      </tbody></table></div>
+  </section>
+</main>
+
+<main class="tab" id="arg" hidden>
+  <header class="ph">
+    <p class="eyebrow">ARG</p>
+    <h2>ปริศนาที่เล่นต่อนอกเกม</h2>
+    <p>ARG ไม่ขวางการเล่นปกติ ทุกชั้นมีทางให้ผู้เล่นทั่วไปผ่านได้โดยไม่ต้องแก้ปริศนา ผู้เล่นสายสืบได้เรื่องเพิ่มเท่านั้น</p>
+    <ul class="toc"><li><a href="#arg-tier">4 ชั้น</a></li><li><a href="#arg-code">Run Code</a></li><li><a href="#arg-white">ประตูขาว</a></li><li><a href="#arg-badge">Badges</a></li><li><a href="#arg-safe">ความปลอดภัย</a></li></ul>
+  </header>
+  <section class="sec" id="arg-tier">
+    <h3>4 ชั้นของปริศนา</h3>
+    <div class="tbl"><table style="min-width:720px;">
+      <thead><tr><th>ชั้น</th><th>ปริศนา</th><th>ค้นหาที่ไหน</th><th>ได้อะไร</th><th>ข้อควรระวัง</th></tr></thead>
+      <tbody>
+        <tr><td>1 ในเกม</td><td>Morse จากไฟกะพริบ</td><td class="m">W-03 และหัวใจของประตู</td><td class="m">รหัสเปิดตู้เซฟอาหาร</td><td class="m">เกมเพลย์ปกติ</td></tr>
+        <tr><td>2 เสียง</td><td>Audio Spectrogram</td><td class="m">วิทยุใน W-01 และหอกระจายเสียงใน W-06</td><td class="m">ภาพขาวดำบอกรหัส 4 หลัก</td><td class="m">ใช้ Audacity หรือ Sonic Visualiser นอกเกม</td></tr>
+        <tr><td>3 เมตา</td><td>ตัวอักษร 11 หลักของ video ID</td><td class="m">เลขซีเรียลบน LiDAR ก้นถาดพิซซ่า ป้ายใน W-11</td><td class="m">วิดีโอเทปขององค์กร</td><td class="m">อ้างอิงผ่าน Social Links ทางการ ตรวจนโยบายก่อนใช้</td></tr>
+        <tr><td class="c-purple">4 ประตูม่วง</td><td>Cipher Drop</td><td class="m">คัทซีนฉากจบ</td><td class="m">เนื้อเรื่องหลักและ True Ending</td><td class="m">ใช้ชื่อช่องที่ต้องถอดรหัส ไม่ใส่ QR หรือ URL ตรง</td></tr>
+      </tbody></table></div>
+    <div class="callout"><b>กระจายปริศนาข้ามชุมชน</b><p>เพราะแต่ละรอบเจอเพียง 6 จาก 12 มิติ ไม่มีทีมไหนเก็บเบาะแสได้ครบ ชุมชนต้องแชร์สิ่งที่เจอกัน ทุกชิ้นส่วนสำคัญมีสำเนาในอย่างน้อย 2 มิติ</p></div>
+  </section>
+  <section class="sec" id="arg-code">
+    <h3>Run Code: สีที่เลือกมีความหมาย</h3>
+    <p class="lead">เซิร์ฟเวอร์บันทึกสีที่ทีมเลือกในแต่ละมิติ (▲ แดง = R, ● ฟ้า = B) เมื่อจบเกมแสดงเป็นรหัส 6 ตัว เช่น RBBRBR ผลทางเกมเพลย์ยังเหมือนเดิมเสมอ ข้อมูลนี้มีไว้เล่าต่อ</p>
+    <div class="tbl"><table style="min-width:560px;">
+      <thead><tr><th>ลำดับพิเศษ</th><th>รหัส</th><th>รางวัล</th></tr></thead>
+      <tbody>
+        <tr><td>แดงทั้งหมด</td><td class="c-red">RRRRRR</td><td class="m">Badge Stubborn Red และโถงสุดท้ายมีกลิ่นเหล็ก</td></tr>
+        <tr><td>ฟ้าทั้งหมด</td><td class="c-blue">BBBBBB</td><td class="m">Badge True Blue และโถงสุดท้ายมีเสียงน้ำ</td></tr>
+        <tr><td>สลับกัน</td><td>RBRBRB หรือ BRBRBR</td><td class="m">Badge Metronome และเทอร์มินัลตอบสนองจังหวะ</td></tr>
+        <tr><td>สมมาตร</td><td>RBBBBR</td><td class="m">บันทึกลับของ E-08 ในคัทซีน</td></tr>
+      </tbody></table></div>
+  </section>
+  <section class="sec" id="arg-white">
+    <h3>ประตูขาว (White Door)</h3>
+    <div class="grid">
+      <div class="panel"><h4>สายปริศนาตัวอย่าง</h4><ul>
+        <li>เบาะแสจาก Morse, สเปกโตรแกรม และใบเสร็จ 3:33 ประกอบกันเป็นรหัส 4 หลัก</li>
+        <li>เมื่อผ่านมิติที่ 3 โถงมีเทอร์มินัลที่รับรหัสนี้</li>
+        <li>ถ้าถูก เส้นขอบประตูที่ 3 สว่างขึ้น ประตูขาวปรากฏข้างประตูม่วงเมื่อผ่านครบ</li></ul></div>
+      <div class="panel"><h4>หลักออกแบบ</h4><ul>
+        <li>ทุกปริศนามีสองแหล่งยืนยัน</li>
+        <li>ผู้เล่นทั่วไปได้คำใบ้ในเกมพอให้รู้ว่ามีอะไรซ่อนอยู่</li>
+        <li>ไม่มีปริศนาไหนต้องใช้ข้อมูลส่วนตัวหรือบัญชีภายนอก</li></ul></div>
+    </div>
+  </section>
+  <section class="sec" id="arg-badge">
+    <h3>Badges</h3>
+    <div class="grid">
+      <div class="panel"><h4>Purple Door</h4><p>เปิดประตูม่วง</p></div>
+      <div class="panel"><h4>Zero Echo</h4><p>จบรอบโดยไม่มีใครจาง</p></div>
+      <div class="panel"><h4>Stubborn Red · True Blue · Metronome</h4><p>ได้จากลำดับสีพิเศษ</p></div>
+      <div class="panel"><h4>Listener's Silence</h4><p>ผ่าน W-06 โดยไม่ถูกจับเลย</p></div>
+      <div class="panel"><h4>Cartographer</h4><p>ถ่ายภาพความผิดปกติครบใน W-04 โดยไม่หลงทาง</p></div>
+      <div class="panel"><h4>The Extra</h4><p>หาผู้ร่วมทางปลอมใน W-07 ได้ในรอบแรก</p></div>
+      <div class="panel"><h4>White Door</h4><p>เปิดประตูขาว (ซ่อน)</p></div>
+      <div class="panel"><h4>One Arm Short</h4><p>จบรอบทั้งที่เสียแขนไปข้างหนึ่ง</p></div>
+    </div>
+  </section>
+  <section class="sec" id="arg-safe">
+    <h3>ความปลอดภัยและนโยบายแพลตฟอร์ม</h3>
+    <div class="grid">
+      <div class="panel"><h4>ในเกม</h4><ul><li>ไม่ขอข้อมูลส่วนตัวหรือพาไปแอปอื่นโดยตรง</li><li>ไม่ใช้ QR หรือ URL ใน Cutscene</li><li>ลิงก์ทางการอยู่ที่ Social Links ของเกม</li></ul></div>
+      <div class="panel"><h4>ก่อนเผยแพร่</h4><ul><li>ตรวจนโยบายล่าสุดเรื่องลิงก์และเนื้อหา</li><li>ปริศนาไม่เกี่ยวกับสถานที่หรือบุคคลจริง</li><li>เนื้อหา 16+ ตรวจฉลากความเหมาะสมของประสบการณ์ให้ตรงกับความรุนแรงจริง</li></ul></div>
+    </div>
+  </section>
+</main>
+
+<main class="tab" id="tech" hidden>
+  <header class="ph">
+    <p class="eyebrow">Technical</p>
+    <h2>เทคนิคบน Roblox และการเล่นบนมือถือ</h2>
+    <p>ข้อมูลด้านล่างเป็นแนวทางสถาปัตยกรรมและงบประมาณเป้าหมาย ตรวจเอกสาร Roblox ฉบับล่าสุดและทดสอบบนเครื่องจริงก่อนตัดสินใจ</p>
+    <ul class="toc"><li><a href="#te-arch">สถาปัตยกรรม</a></li><li><a href="#te-mobile">มือถือ</a></li><li><a href="#te-genre">มิติที่เปลี่ยนรูปแบบภาพ</a></li><li><a href="#te-lidar">LiDAR</a></li><li><a href="#te-access">การเข้าถึง</a></li><li><a href="#te-chat">การสื่อสาร</a></li></ul>
+  </header>
+  <section class="sec" id="te-arch">
+    <h3>สถาปัตยกรรม</h3>
+    <div class="tbl"><table style="min-width:640px;">
+      <thead><tr><th>โมดูล</th><th>หน้าที่</th><th>ผู้ตัดสิน</th></tr></thead>
+      <tbody>
+        <tr><td>DoorService</td><td class="m">นับฝ่ามือ จับเวลา 30 วินาที ล็อกประตู สุ่มเมื่อเสมอ</td><td class="m">เซิร์ฟเวอร์</td></tr>
+        <tr><td>WorldService</td><td class="m">โคลนมิติจาก ServerStorage ไปวางห่างโถง และถอนเมื่อผ่าน</td><td class="m">เซิร์ฟเวอร์</td></tr>
+        <tr><td>SurvivalService</td><td class="m">เกจ สตามิน่า สถานะร่างกาย การเลือดออก ล้มและจาง</td><td class="m">เซิร์ฟเวอร์ ไคลเอนต์ทำนายล่วงหน้า</td></tr>
+        <tr><td>InventoryService</td><td class="m">เก็บตารางและวางไอเทม ตรวจการย้ายทุกครั้ง จำกัดอัตราคำขอ</td><td class="m">เซิร์ฟเวอร์</td></tr>
+        <tr><td>PerceptionService</td><td class="m">เลนส์ ภาพหลอน ส่งคำสั่งเฉพาะไคลเอนต์ของผู้ป่วย</td><td class="m">ไคลเอนต์</td></tr>
+        <tr><td>AudioDirector</td><td class="m">เลเยอร์เพลง ช่วงเงียบ เสียงตามระยะ</td><td class="m">ไคลเอนต์ ตามสถานะจากเซิร์ฟเวอร์</td></tr>
+        <tr><td>ProgressService</td><td class="m">มิติที่ผ่าน Run Code Echo Badge</td><td class="m">เซิร์ฟเวอร์</td></tr>
+      </tbody></table></div>
+    <div class="grid">
+      <div class="panel"><h4>Place เดียว</h4><p>ทุกมิติอยู่ใน Place เดียวกัน วางห่างกันและใช้ StreamingEnabled เพื่อลดหน่วยความจำ โหลดมิติที่เลือกเท่านั้น</p></div>
+      <div class="panel"><h4>ห้อง 6 และ 8 คน</h4><p>ห้อง 8 คนของผู้ซื้อ Game Pass เปิดเป็นเซิร์ฟเวอร์ส่วนตัวแบบสำรองที่นั่ง ใช้ค่าสเกลจากตารางในแท็บระบบ</p></div>
+    </div>
+  </section>
+  <section class="sec" id="te-mobile">
+    <h3>เล่นบนมือถือ</h3>
+    <div class="grid">
+      <div class="panel"><span class="tag new">ใหม่</span><h4>การควบคุม</h4><ul><li>ปุ่ม E ใหญ่ปุ่มเดียวเปลี่ยนตามบริบท (แนบมือ เปิดประตู แบก)</li><li>การแนบฝ่ามือสลับแบบแตะได้</li><li>วงล้อร่างกายแตะเลือกส่วน ไม่ต้องลาก</li><li>วิ่งแบบสลับ (toggle) และหลับตาด้วยปุ่มค้าง</li></ul></div>
+      <div class="panel"><span class="tag new">ใหม่</span><h4>ประสิทธิภาพ</h4><ul><li>เป้าหมาย 30 เฟรมต่อวินาทีบนเครื่องระดับกลาง</li><li>โปรไฟล์ต่ำ กลาง สูง เลือกอัตโนมัติจากการวัดช่วงโหลด</li><li>ภาพหลอนและ LiDAR ปรับจำนวนจุดตามโปรไฟล์</li></ul></div>
+      <div class="panel"><span class="tag new">ใหม่</span><h4>UI</h4><ul><li>ป้ายสัมผัสไม่เล็กกว่า 44 พิกเซล</li><li>แชตข้อความย่อได้ มีตัวช่วยพิมพ์วลีสั้น</li><li>ตัวอักษรบนจอปรับขนาดได้</li></ul></div>
+    </div>
+  </section>
+  <section class="sec" id="te-genre">
+    <h3>มิติที่เปลี่ยนรูปแบบภาพ</h3>
+    <div class="tbl"><table style="min-width:640px;">
+      <thead><tr><th>มิติ</th><th>รูปแบบ</th><th>แนวทางสร้าง</th></tr></thead>
+      <tbody>
+        <tr><td>W-09</td><td class="m">RPG 2D มองจากด้านบน</td><td class="m">ล็อกกล้องมุมบน ใช้ SurfaceGui ภาพสไปรต์ ตารางพิกัด กล่องข้อความ แปลงเกจเป็นไอคอนสถานะ</td></tr>
+        <tr><td>W-10</td><td class="m">เกมยิงยุคเก่า</td><td class="m">ปรับความละเอียดต่ำด้วยหน้าจอซ้อนทับ สไปรต์ billboard ชั้นภาพเดียว ไม่มีอาวุธ ใช้แฟลชและคีย์การ์ด</td></tr>
+        <tr><td>W-11</td><td class="m">Point and click</td><td class="m">กล้องคงที่ต่อผู้เล่นคนละมุม คลิกจุดที่กดได้ รวมไอเทมเป็นเมนู</td></tr>
+      </tbody></table></div>
+  </section>
+  <section class="sec" id="te-lidar">
+    <h3>LiDAR และ Point Cloud</h3>
+    <div class="grid">
+      <div class="panel"><h4>แนวทาง</h4><p>ยิง Raycast ฝั่งไคลเอนต์ในงบต่อเฟรมที่จำกัด วาดจุดด้วยพูลของวัตถุซ้ำ หรือ EditableImage ถ้าเงื่อนไขของแพลตฟอร์มเอื้อ ควรตรวจก่อนและเตรียมแผนสำรอง</p></div>
+      <div class="panel"><h4>แชร์ผลสแกน</h4><p>ส่งเฉพาะจุดที่ลดความละเอียดแล้วไปให้ผู้เล่นในระยะ 20 สตั๊ด จำกัดจำนวนจุดต่อวินาที</p></div>
+    </div>
+  </section>
+  <section class="sec" id="te-access">
+    <h3>การเข้าถึงและความปลอดภัยของผู้เล่น</h3>
+    <div class="grid">
+      <div class="panel"><h4>ไฟกะพริบ</h4><p>เตือนก่อนเริ่มเกมและมีสวิตช์ลดการกะพริบ ลดภาพแฟลชแรงใน W-12</p></div>
+      <div class="panel"><h4>สี</h4><p>สัญลักษณ์ประตูและสีไอเทมมีรูปทรงกำกับเสมอ</p></div>
+      <div class="panel"><h4>เสียง</h4><p>คำบรรยายเหตุการณ์ที่ใช้เสียงเป็นเบาะแส เช่น เสียงเตือนอันตรายใกล้ตัว</p></div>
+      <div class="panel"><h4>ความรุนแรง</h4><p>สวิตช์ปิดเลือดและภาพการขาดของอวัยวะ</p></div>
+    </div>
+  </section>
+  <section class="sec" id="te-chat">
+    <h3>การสื่อสาร</h3>
+    <div class="grid">
+      <div class="panel"><h4>แชตตามระยะเป็นหลัก</h4><p>ข้อความผ่านระบบแชตของ Roblox ที่มีการกรอง ตัวอักษรเพี้ยนเมื่อสติต่ำ</p></div>
+      <div class="panel"><h4>เสียงพูดเป็นตัวเสริม</h4><p>เปิดได้เฉพาะบัญชีที่แพลตฟอร์มอนุญาต ต้องไม่เป็นสิ่งจำเป็นต่อการผ่านด่าน</p></div>
+    </div>
+  </section>
+</main>
+
+<main class="tab" id="plan" hidden>
+  <header class="ph">
+    <p class="eyebrow">Plan</p>
+    <h2>แผนงานและบันทึกการตัดสินใจ</h2>
+    <ul class="toc"><li><a href="#pl-name">ชื่อเกม</a></li><li><a href="#pl-road">ลำดับการสร้าง</a></li><li><a href="#pl-test">เป้าหมาย playtest</a></li><li><a href="#pl-log">บันทึกการตัดสินใจ</a></li><li><a href="#pl-open">ยังค้างอยู่</a></li></ul>
+  </header>
+  <section class="sec" id="pl-name">
+    <h3>ชื่อเกมและคำอธิบายหน้าร้าน</h3>
+    <div class="callout"><b>One Door Left</b><p>เหลือประตูเดียว ชื่อตรงกับกลไกหลัก คือเลือกบานหนึ่งแล้วอีกบานล็อกตลอดไป และตรงกับประตูม่วงบานสุดท้าย ผมค้นแล้วไม่พบเกมชื่อเดียวกันบน Roblox แต่ควรตรวจในหน้าค้นหาของ Roblox อีกครั้งก่อนจดชื่อ</p></div>
+    <div class="callout"><b>คำอธิบายสำหรับหน้าเกม</b><p>คุณและเพื่อนอีก 5 คนตื่นขึ้นในโถงที่ไม่มีใครสร้าง มีประตูสองบาน แนบมือของคุณลงบนบานเดียว บานที่เหลือจะไม่เปิดอีก ข้างหลังประตูคือมิติที่ไม่มีสองที่เหมือนกัน บางที่เป็นมิตร บางที่เป็นเกมเก่าๆ บางที่มืดสนิท ทุกที่พร้อมเอาอะไรบางอย่างไปจากร่างกายคุณ แบกเพื่อนไว้ แบ่งอาหารให้ดี และอย่าเชื่อสิ่งที่ตาเห็นทั้งหมด 16+</p></div>
+    <p class="fine">ชื่อสำรอง: Threshold 3:33 · Sealed Side</p>
+  </section>
+  <section class="sec" id="pl-road">
+    <h3>ลำดับการสร้าง</h3>
+    <div class="tbl"><table style="min-width:640px;">
+      <thead><tr><th>ระยะ</th><th>ส่งมอบ</th><th>เกณฑ์ผ่าน</th></tr></thead>
+      <tbody>
+        <tr><td>P0 Graybox</td><td class="m">โถง Palm Lock รอบเสมอและหมดเวลา มิติทดสอบ 1 มิติ</td><td class="m">6 คนโหวตได้ ไม่ค้าง</td></tr>
+        <tr><td>P1 Survival</td><td class="m">เกจ สตามิน่า กระเป๋า ร่างกาย การแบก ล้มและจาง</td><td class="m">ทีมแบ่งของและช่วยกันโดยไม่ต้องอธิบาย</td></tr>
+        <tr><td>P2 Vertical slice</td><td class="m">W-03 W-02 W-09 พร้อมเสียงจริงและโถงสามขั้นแรก</td><td class="m">playtest 3 รอบ ผู้เล่นอยากเล่นซ้ำ</td></tr>
+        <tr><td>P3 Content</td><td class="m">12 มิติ เอนทิตี เลนส์ Mutators กติกาสุ่ม</td><td class="m">ทุกมิติเล่นจบได้ใน 4–12 นาที</td></tr>
+        <tr><td>P4 Story / ARG</td><td class="m">บันทึก 12 ฉบับ คัทซีน เทอร์มินัล Run Code Badges</td><td class="m">ผู้เล่นสายสืบแก้สายปริศนาตัวอย่างได้</td></tr>
+        <tr><td>P5 Polish</td><td class="m">มือถือ การเข้าถึง ประสิทธิภาพ กันโกง สมดุล</td><td class="m">30 FPS บนเครื่องระดับกลาง</td></tr>
+        <tr><td>P6 Live</td><td class="m">วัดผล แก้ไขด่วน แม่แบบมิติใหม่</td><td class="m">เพิ่มมิติใหม่ได้โดยไม่แตะระบบหลัก</td></tr>
+      </tbody></table></div>
+  </section>
+  <section class="sec" id="pl-test">
+    <h3>เป้าหมายตั้งต้นสำหรับ playtest</h3>
+    <div class="tbl"><table style="min-width:520px;">
+      <thead><tr><th>ตัววัด</th><th>เป้าหมาย</th></tr></thead>
+      <tbody>
+        <tr><td>เวลาต่อรอบ</td><td class="m">60–75 นาที</td></tr>
+        <tr><td>การโหวตที่ต้องใช้ตัวจับเวลา</td><td class="m">ไม่เกิน 25%</td></tr>
+        <tr><td>ทีมที่ Thirst ถึง 0% ในมิติหนึ่ง</td><td class="m">ไม่เกิน 25%</td></tr>
+        <tr><td>จางต่อรอบ (ค่ากลาง)</td><td class="m">2–4 ครั้ง</td></tr>
+        <tr><td>ผู้เล่นเลิกก่อนมิติที่ 3</td><td class="m">ไม่เกิน 20%</td></tr>
+        <tr><td>ผู้เล่นมือถือที่ผ่านมิติแรก</td><td class="m">ไม่ต่ำกว่าเดสก์ท็อปเกิน 10 จุดเปอร์เซ็นต์</td></tr>
+      </tbody></table></div>
+  </section>
+  <section class="sec" id="pl-log">
+    <h3>บันทึกการตัดสินใจ</h3>
+    <div class="tbl"><table style="min-width:760px;">
+      <thead><tr><th>เรื่อง</th><th>เดิม</th><th>ตอนนี้</th><th>เหตุผล</th></tr></thead>
+      <tbody>
+        <tr><td>เสมอที่ประตู</td><td class="m">ไม่มีกฎ</td><td class="m">นับ 30 วินาที เสมอให้ประตูสุ่ม</td><td class="m">ไม่ให้เกมค้างในโถง</td></tr>
+        <tr><td>เปิดประตูม่วง</td><td class="m">ทุกคนต้องเข้า</td><td class="m">ผู้ที่ยังยืนอยู่ในเซิร์ฟเวอร์ และมีผู้ชมกับสภาวะจาง</td><td class="m">ไม่ให้คนหลุดหรือ AFK ขวางทีม</td></tr>
+        <tr><td>จำนวนมิติ</td><td class="m">4 มิติ ผ่านครบ</td><td class="m">12 มิติ รอบละ 6</td><td class="m">เกมเล่นซ้ำได้ ความไม่แน่นอนอยู่ถึงท้าย</td></tr>
+        <tr><td>สีของประตู</td><td class="m">ไม่มีผล</td><td class="m">ผลทางเกมเหมือนเดิม แต่บันทึกเป็น Run Code</td><td class="m">ให้การเลือกมีความหมายกับ ARG โดยไม่กระทบสมดุล</td></tr>
+        <tr><td>เสียงพูดตามระยะ</td><td class="m">ระบบหลัก</td><td class="m">แชตข้อความเป็นหลัก เสียงพูดเป็นตัวเสริม</td><td class="m">ไม่ผูกกลไกหลักกับสิ่งที่บางบัญชีใช้ไม่ได้</td></tr>
+        <tr><td>QR ใน Cutscene</td><td class="m">มี</td><td class="m">รหัสที่ต้องถอดความ</td><td class="m">ลดความเสี่ยงต่อนโยบายลิงก์นอกแพลตฟอร์ม</td></tr>
+        <tr><td>พิซซ่า</td><td class="m">กิน 4 ช่อง</td><td class="m">แตกเป็นชิ้น 1×1 ได้</td><td class="m">ไม่ให้ใครต้องแบกทั้งถาด</td></tr>
+        <tr><td>จำนวนผู้เล่น</td><td class="m">8 คน</td><td class="m">6 คน และ 8 ด้วย Game Pass</td><td class="m">ตามที่คุณกำหนด</td></tr>
+        <tr><td>การโหวตประตู</td><td class="m">เหยียบแผ่นพื้น</td><td class="m">แนบฝ่ามือด้วย E กินสตามิน่า</td><td class="m">ตามที่คุณกำหนด และเพิ่มต้นทุนของการลังเล</td></tr>
+        <tr><td>อัตราลดเกจ</td><td class="m">−1% ทุก 10 วินาที</td><td class="m">Hunger −1% ต่อ 30 วินาที Thirst −1% ต่อ 20 วินาที</td><td class="m">ของเดิมต้องใช้เสบียงเกินจริงต่อรอบ</td></tr>
+      </tbody></table></div>
+  </section>
+  <section class="sec" id="pl-open">
+    <h3>ยังค้างอยู่</h3>
+    <ul class="rules">
+      <li><strong>ความเสี่ยงฉลากเนื้อหา:</strong> ตรวจว่าภาพการขาดของอวัยวะต้องอยู่ในระดับใดสำหรับ 16+ บน Roblox</li>
+      <li><strong>ราคา Game Pass:</strong> ยังไม่กำหนด</li>
+      <li><strong>ภาษาของเกม:</strong> ภาษาไทยอย่างเดียว หรืออังกฤษควบคู่</li>
+    </ul>
+  </section>
+</main>
+
+<footer>One Door Left · เอกสารออกแบบ ฉบับ 2 · อ้างอิงเอกสาร Roblox Liminal Space Game Plan</footer>
+</div>
+
+<script>
+(function () {
+  var WORLDS = [
+    { c: 'W-01', n: 'Abyssal Ocean', t: 'doc', tone: 'อันตราย', d: 3, m: '9–11 นาที',
+      tag: 'ศูนย์วิจัยใต้น้ำที่ถูกทิ้ง น้ำท่วมสูงต่างกันทีละห้อง',
+      f: [['เป้าหมาย', 'เปิดปั๊มระบายน้ำ 3 ตัว แล้วขึ้นช่องฟักผิวน้ำ'],
+          ['จุดเด่น', 'Breath Tether: ต่อท่อลมถึงกันและแบ่งออกซิเจนได้ ท่อยาว 15 สตั๊ด ท่อหลุดเมื่อมีเหตุการณ์ ออกซิเจนใช้ 2% ต่อวินาทีใต้น้ำ เติมที่ฟองอากาศ'],
+          ['ภัย', 'ไม่มีสัตว์ประหลาด มีคลื่นเสียง Ping ทุก 40–70 วินาที ท่อระเบิดแรงดัน เครื่องปั๊มดูดแขน'],
+          ['เสบียง', 'อาหารกระป๋องมาก น้ำดื่มน้อย'],
+          ['ARG', 'วิทยุบันทึกคลื่น → สเปกโตรแกรม']] },
+    { c: 'W-02', n: 'LiDAR Void', t: 'doc', tone: 'อันตราย', d: 4, m: '8–10 นาที',
+      tag: 'ความมืดสนิท เห็นได้เฉพาะจุดสีที่เลเซอร์แตะ',
+      f: [['เป้าหมาย', 'หาจุดชาร์จ 3 จุดเพื่อเปิดไฟสำรอง แล้วไปที่ประตูกลับ'],
+          ['จุดเด่น', 'สแกนสองโหมด: Sweep กวาดละเอียดกินแบตมาก Spray กระจายเร็วกินน้อย สีของจุดบอกวัสดุ ผลสแกนแชร์ให้ผู้เล่นใกล้ 20 สตั๊ด'],
+          ['ภัย', 'ร่างจุดมนุษย์ (Phantom) 1 ใน 5 ครั้งเป็นเพื่อนจริงที่ยืนอยู่'],
+          ['เสบียง', 'แบตเตอรี่มาก น้ำน้อย สแกนทำให้ Thirst ลดเร็วขึ้น 1.5 เท่า'],
+          ['ARG', 'เลขซีเรียลบนเครื่องสแกน']] },
+    { c: 'W-03', n: 'Damp Office', t: 'doc', tone: 'แปลก', d: 3, m: '10–12 นาที',
+      tag: 'สำนักงานปี 1980 พรมเหลืองชื้น ไฟหึ่ง เขาวงกตซ้ำเดิม',
+      f: [['เป้าหมาย', 'หาเลข 4 ตัวจากสี่โซน ใส่รหัสที่ลิฟต์ซ่อน'],
+          ['จุดเด่น', 'ห้องเรียงใหม่เมื่อไม่มีใครมอง ใช้ชอล์กทำเครื่องหมาย รอยเท้าเปียกบนพรมเป็นเส้นทางของรอบก่อน'],
+          ['ภัย', 'เสียงฝีเท้าปริศนาตามหลัง 2–3 ก้าวหลังคุณหยุด เพดานถล่ม วนเกิน 4 นาที Hunger และ Thirst ลด×1.5'],
+          ['เสบียง', 'ตู้ขนมอัตโนมัติ อาหารมาก ตู้เซฟเปิดด้วย Morse'],
+          ['ARG', 'Morse จากไฟกะพริบ']] },
+    { c: 'W-04', n: 'Architectural Anomaly', t: 'doc', tone: 'แปลก', d: 4, m: '9–11 นาที',
+      tag: 'ห้องไร้จุดจบ เลี้ยวขวาสี่ครั้งแล้วกลับที่เดิม',
+      f: [['เป้าหมาย', 'ถ่ายภาพความผิดปกติ 5 จุดด้วยกล้อง (ไอเทมของมิติ) ห้องละหนึ่งจุด'],
+          ['จุดเด่น', 'เงาตกผิดทิศ นาฬิกาเดินถอยหลัง ห้องเรียงใหม่เมื่อไม่มีใครมอง'],
+          ['ภัย', 'ไม่มีสิ่งมีชีวิต Infra-sound ลดสติเมื่อยืนลำพัง พลัดตกช่องว่าง'],
+          ['เสบียง', 'ปานกลาง'], ['ARG', 'ป้ายบอกชั้นที่ไม่มีอยู่จริง']] },
+    { c: 'W-05', n: 'The Convenience Store', t: 'new', tone: 'ปกติ', d: 2, m: '7–9 นาที',
+      tag: 'ร้านสะดวกซื้อกะดึก ฝนตกข้างนอก เหมือนจริงเกือบทุกอย่าง',
+      f: [['เป้าหมาย', 'เก็บใบเสร็จ 6 ใบ ให้เครื่องคิดเงินเปิดประตูหลังร้าน'],
+          ['จุดเด่น', 'ยิ่งหยิบของ ไฟยิ่งดับทีละชั้น พนักงานต้อนรับ (Greeter) แลกของกับคุณ'],
+          ['ภัย', 'แทบไม่มี ความผิดปกติมาทีละนิด ประตูตู้แช่เปิดเข้าด้านใน ป้ายราคาไม่เปลี่ยน'],
+          ['เสบียง', 'มากที่สุดในเกม แต่คุ้มเฉพาะทีมที่เลือกหยิบ'],
+          ['ARG', 'ใบเสร็จทุกใบลงเวลา 3:33']] },
+    { c: 'W-06', n: 'The Listener', t: 'new', tone: 'อันตราย', d: 5, m: '9–11 นาที',
+      tag: 'โรงเรียนยามดึก ทางเดินยาว ห้องเรียนเปิดแง้ม',
+      f: [['เป้าหมาย', 'เปิดไฟสำรอง 3 ตัว แล้วพาทุกคนไปห้องดนตรี'],
+          ['จุดเด่น', 'เอนทิตีตาบอดฟังเสียง คุณเดินช้า หมอบ โยนไอเทมเป็นเสียงล่อ'],
+          ['ภัย', 'พุ่งตามเสียงเป็นช่วงสั้น ทำให้ขาหรือแขนบาดเจ็บ ดูแท็บเอนทิตี'],
+          ['เสบียง', 'น้อย กระป๋องดังและดึงเอนทิตี'],
+          ['ARG', 'หอกระจายเสียงสเปกโตรแกรม']] },
+    { c: 'W-07', n: 'The Extra', t: 'new', tone: 'แปลก', d: 4, m: '8–10 นาที',
+      tag: 'ศูนย์ควบคุมของ Aetheris รายชื่อทีมมีคนเกินมาหนึ่งคน',
+      f: [['เป้าหมาย', 'ตรวจบัตรประจำตัวบนบอร์ด หาว่าใครไม่ได้เป็นผู้เล่น'],
+          ['จุดเด่น', 'ผู้ร่วมทางที่เกินมาพิมพ์แชตเหมือนคน ถ้าไม่ถูกเปิดโปงจะตามข้ามมิติและมีฝ่ามือโหวตได้'],
+          ['ภัย', 'ไม่ทำร้ายร่างกาย ผู้ถูกโหวตผิดได้รับ Echo +1 ไม่ถูกเตะออกจากห้อง'],
+          ['เสบียง', 'ปานกลาง'], ['ARG', 'บันทึก E-07']] },
+    { c: 'W-08', n: 'The Waiting Room', t: 'new', tone: 'เป็นมิตร', d: 1, m: '4–5 นาที',
+      tag: 'ห้องรอแบบคลินิก ตู้กดน้ำ นาฬิกา 3:33',
+      f: [['เป้าหมาย', 'อยู่ในห้อง 3 นาที ประตูกลับเปิดเอง'],
+          ['จุดเด่น', 'เก้าอี้ผ่าตัดติดตั้งชิ้นส่วนเทียม 1 ครั้งต่อรอบ ห้องปลอดภัยแต่เก้าอี้ทุกตัวหันเข้าหากัน'],
+          ['ภัย', 'ไม่มี เป็นช่วงพัก'], ['เสบียง', 'มาก เติมไม่จำกัดครั้งแต่ใช้ได้ครั้งเดียวต่อคน'], ['ARG', 'บันทึกเสียงของดร.เรเวน']] },
+    { c: 'W-09', n: 'Save Point', t: 'new', tone: 'เป็นมิตร', d: 2, m: '9–12 นาที',
+      tag: 'เข้ามาแล้วทุกอย่างกลายเป็นเกม RPG 2D มองจากด้านบน',
+      f: [['เป้าหมาย', 'ทำภารกิจของชาวบ้าน 3 งาน แล้วออกจากประตูหมู่บ้าน'],
+          ['จุดเด่น', 'จุดเซฟ ฟื้นอวัยวะที่ขาดได้ แลกกับการลบบันทึกใน Journal 1 รายการ ผู้เล่นทุกคนเห็นเหมือนกันแต่เดินในตารางพิกัด'],
+          ['ภัย', 'Random encounter คือ Glitch เดินช้าไล่ตามในระยะสั้น ถ้าไม่ได้ข้ามบทสนทนา ชาวบ้านบางคนโกหก'],
+          ['เสบียง', 'ซื้อด้วยของที่มีหรือแลกด้วยบทสนทนา'], ['ARG', 'ชื่อเซฟสะกดตรงกับรหัส']] },
+    { c: 'W-10', n: 'Keycard Hall', t: 'new', tone: 'อันตราย', d: 4, m: '8–10 นาที',
+      tag: 'เปลี่ยนเป็นเกมยิงยุค 90 ภาพความละเอียดต่ำ ไม่มีอาวุธ',
+      f: [['เป้าหมาย', 'เก็บคีย์การ์ดแดงและฟ้า เปิดประตูสองบานเข้าห้องสุดท้าย'],
+          ['จุดเด่น', 'คีย์การ์ดสองสีเปิดห้องเดียวกันเสมอ แฟลชทำให้ศัตรูชะงัก'],
+          ['ภัย', 'Sprites วิ่งพุ่งเป็นช่วง แขนและขาบาดเจ็บ'],
+          ['เสบียง', 'ปานกลาง'], ['ARG', 'เพลงยุค 90 ที่ถอดเป็นรหัส']] },
+    { c: 'W-11', n: 'The Camera Room', t: 'new', tone: 'แปลก', d: 3, m: '8–10 นาที',
+      tag: 'point and click ผู้เล่นแต่ละคนเห็นห้องเดียวกันจากกล้องคนละตัว',
+      f: [['เป้าหมาย', 'ประกอบเบาะแสจากแต่ละมุมเปิดประตูกลับ'],
+          ['จุดเด่น', 'ข้อมูลไม่สมมาตร ต้องพิมพ์บอกกัน กล้องตัวที่เจ็ดไม่ใช่ของทีม'],
+          ['ภัย', 'คลิกผิดจุดทำให้แขนถูกหนีบ'],
+          ['เสบียง', 'น้อย'], ['ARG', 'ป้ายบนกล้องมีตัวอักษร 11 หลัก']] },
+    { c: 'W-12', n: 'Overexposure', t: 'new', tone: 'อันตราย', d: 5, m: '8–10 นาที',
+      tag: 'ขาวสว่างจ้าจนมองไม่เห็นอะไร ตรงข้ามกับความมืดของ LiDAR Void',
+      f: [['เป้าหมาย', 'เดินตามเสียงกระดิ่งไปยังแท่นแว่นกันแสง 3 จุด'],
+          ['จุดเด่น', 'หลับตา (C) เพื่อเห็นโครงของห้อง แสงวาบทุก 20–40 วินาที'],
+          ['ภัย', 'แสงวาบทำให้ตาบอดถ้ามองตรง'], ['เสบียง', 'น้อย ยาหยอดตามาก'], ['ARG', 'เงาที่ไม่ควรมี']] }
+  ];
+
+  var ENT = [
+    { n: 'The Listener', k: 'อันตราย', c: 'hot', w: 'W-06', f: [['พฤติกรรม', 'ตาบอด ฟังเสียง พุ่งหาแหล่งเสียงสูงสุดได้ 6 วินาที แล้วเลิกและพักนิ่ง 20 วินาที'], ['ทำร้าย', 'ขาหรือแขนบาดเจ็บ'], ['รับมือ', 'เดินช้า หมอบ โยนของเป็นเสียงล่อ ไม่เปิดกระป๋อง']] },
+    { n: 'The Greeter', k: 'เป็นมิตร', c: 'cool', w: 'W-05 W-08', f: [['พฤติกรรม', 'พนักงานต้อนรับ ยิ้มตลอด ไม่ทำร้ายใคร ขอแลกของ เช่น ให้ผ้าพันแผลแลกแบตเตอรี่'], ['เงื่อนไข', 'ถ้าคุณทำลายของในร้าน ไฟดับหมดโดยไม่ทำร้ายใคร']] },
+    { n: 'The Inspector', k: 'เป็นกลาง', c: 'new', w: 'W-03 W-10', f: [['พฤติกรรม', 'เดินตรวจอย่างช้าๆ ไม่ทำอะไรถ้าไม่ถูกยั่ว'], ['ตัวกระตุ้น', 'สัมผัสตัวหรือส่องไฟที่หน้า'], ['ถ้าถูกยั่ว', 'พุ่ง 8 วินาที ทำให้แขนบาดเจ็บ แล้วกลับไปตรวจต่อ']] },
+    { n: 'The Tail', k: 'ตามข้ามมิติ', c: 'hot', w: 'หลายมิติ', f: [['พฤติกรรม', 'เกาะผู้เล่นที่สติต่ำกว่า 30% ตามผ่านประตูกลับ ปรากฏเป็นเงาในโถงเห็นเฉพาะคนนั้น ทำให้สติลดและสร้างฝ่ามือปลอมบนประตูโหวต'], ['กำจัด', 'ทีมทั้งหมดหลับตา 10 วินาทีพร้อมกันในที่สว่าง']] },
+    { n: 'The Extra', k: 'ตามข้ามมิติ', c: 'hot', w: 'W-07', f: [['พฤติกรรม', 'เลียนแบบผู้เล่น ถ้าไม่ถูกเปิดโปงจะตามเข้าโถงและโหวตด้วย'], ['จุดสังเกต', 'แนบฝ่ามือนานเท่าไรก็ไม่เหนื่อย ไม่มีเสียงหายใจเมื่อยืนนิ่ง']] },
+    { n: 'Sprites', k: 'อันตราย', c: 'hot', w: 'W-10', f: [['พฤติกรรม', 'ภาพ billboard เดินช้า แล้วพุ่งเป็นช่วงสั้นเมื่อเห็นผู้เล่น'], ['รับมือ', 'แฟลชทำให้ชะงัก 3 วินาที ซ่อนหลังประตู']] },
+    { n: 'The Villagers', k: 'เป็นมิตร', c: 'cool', w: 'W-09', f: [['พฤติกรรม', 'ชาวบ้านพูดผ่านกล่องข้อความ ให้ภารกิจ ไม่ทำร้าย แต่บางคนพูดโกหก'], ['รับมือ', 'ถามสองคนเพื่อยืนยันกันเอง']] },
+    { n: 'The Seventh Lens', k: 'เป็นกลาง', c: 'new', w: 'W-11', f: [['พฤติกรรม', 'กล้องตัวที่เจ็ดที่ไม่ใช่ของทีม ไม่เคลื่อนไหว'], ['ถ้าคลิก', 'เห็นห้องจากด้านบน มีร่างหนึ่งที่ไม่ใช่สมาชิกทีม แต่ไม่ทำอะไร']] }
+  ];
+
+  var LENS = [
+    ['Wall Lens', 'เห็นกำแพงทึบตรงหน้า ที่จริงทางเปิดอยู่ ลองสัมผัสหรือถามเพื่อน'],
+    ['Monster Lens', 'เห็นเพื่อนเป็นมอนสเตอร์ ชื่อซ่อน แต่แชตยังเป็นปกติ'],
+    ['Many Doors', 'เห็นประตู 3–5 บานตอนโหวต ฝ่ามือบนบานปลอมไม่นับ แต่คุณไม่รู้ว่าบานไหนปลอม'],
+    ['Mirror Lens', 'ตัวอักษรและ HUD กลับด้าน'],
+    ['Silence Lens', 'ไม่ได้ยินเสียงเพื่อน แต่ยังเห็นข้อความแชต'],
+    ['Swapped Lens', 'ไอเทมในกระเป๋าแสดงชื่อและรูปสลับกัน ผลจริงยังเป็นของจริง'],
+    ['Count Lens', 'นับสมาชิกทีมผิด เห็นมากกว่าที่มีจริงหนึ่งคน'],
+    ['Floor Lens', 'พื้นกลายเป็นหลุมดำ ที่จริงปลอดภัย']
+  ];
+
+  var LOGS = [
+    ['E-01', 'มารีน', 'W-01', 'ฉันปิดวาล์วช้าไปหนึ่งนาที น้ำที่ท่วมคือผลของการทดลองที่เราไม่ยอมยกเลิก'],
+    ['E-02', 'เคสต์', 'W-02', 'ทุกครั้งที่สแกนมีคนยืนไกลๆ ครั้งที่ห้าฉันเห็นว่าเขาถือเครื่องสแกนเหมือนกัน'],
+    ['E-03', 'ออร์ดี', 'W-03', 'ตารางลงเวลาบอกว่าฉันเข้างาน 4,112 วัน ไม่มีบรรทัดไหนบอกว่าฉันออกจากตึก'],
+    ['E-04', 'ไลลา', 'W-04', 'แผนที่ที่ฉันวาดถูกทุกเส้น และไม่ตรงกับห้องไหนเลย'],
+    ['E-05', 'พิม', 'W-05', 'ใบเสร็จทุกใบลงเวลา 3:33 ทั้งที่ฉันซื้อต่างวัน'],
+    ['E-06', 'ฮาร์โลว์', 'W-06', 'มันไม่ได้ฟังเสียงของเรา มันฟังว่าเราเงียบแบบไหน'],
+    ['E-07', 'ผู้ร่วมทาง', 'W-07', 'ถ้าคุณอ่านอยู่ แปลว่านี่ไม่ใช่รอบแรก และฉันคือคนที่คุณไม่ได้เลือก'],
+    ['E-08', 'ดร.เรเวน', 'W-08', 'จากรอบที่สอง เราตัดความต่างของประตูสองบานออก เพื่อดูว่าพวกเขายังเลือกอยู่ไหม'],
+    ['E-09', 'ซาโตะ', 'W-09', 'เซฟล่าสุดของฉันคือเมื่อวาน แต่ไม่มีใครบอกได้ว่าวันนี้คือวันไหน'],
+    ['E-10', 'บราโว', 'W-10', 'คีย์การ์ดแดงกับฟ้าเปิดห้องเดียวกันเสมอ ฉันเพิ่งเข้าใจว่านี่คือคำบอกใบ้'],
+    ['E-11', 'นีน่า', 'W-11', 'กล้องตัวที่เจ็ดไม่ได้ติดตั้งโดยเรา'],
+    ['E-12', 'โอลิเวอร์', 'W-12', 'แสงที่มากพอ ก็เหมือนความมืด']
+  ];
+
+  function dots(n) { var s = ''; for (var i = 1; i <= 5; i++) s += '<i' + (i <= n ? ' class="on"' : '') + '></i>'; return '<span class="dots" role="img" aria-label="ความยาก ' + n + ' จาก 5">' + s + '</span>'; }
+  function toneCls(t) { return t === 'อันตราย' ? 'hot' : t === 'เป็นมิตร' ? 'cool' : t === 'ปกติ' ? 'doc' : 'new'; }
+
+  function renderWorlds() {
+    var out = '';
+    WORLDS.forEach(function (w) {
+      out += '<article class="panel wcard" id="' + w.c.toLowerCase() + '"><header><span class="code">' + w.c + '</span><h3 style="font-size:20px;">' + w.n + '</h3>' +
+        '<span class="tag ' + toneCls(w.tone) + '">' + w.tone + '</span><span class="tag ' + (w.t === 'doc' ? 'doc' : 'new') + '">' + (w.t === 'doc' ? 'จากเอกสาร' : 'ใหม่') + '</span></header>' +
+        '<p>' + w.tag + '</p><dl class="spec"><dt>ความยาก</dt><dd>' + dots(w.d) + ' · ' + w.m + '</dd>';
+      w.f.forEach(function (r) { out += '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>'; });
+      out += '</dl></article>';
+    });
+    document.getElementById('world-list').innerHTML = out;
+  }
+  function renderEnt() {
+    var out = '';
+    ENT.forEach(function (e) {
+      out += '<article class="panel"><div class="tags"><span class="tag ' + e.c + '">' + e.k + '</span><span class="tag">' + e.w + '</span></div><h4>' + e.n + '</h4><dl class="spec">';
+      e.f.forEach(function (r) { out += '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>'; });
+      out += '</dl></article>';
+    });
+    document.getElementById('ent-list').innerHTML = out;
+    var l = '';
+    LENS.forEach(function (x) { l += '<div class="panel"><h4>' + x[0] + '</h4><p>' + x[1] + '</p></div>'; });
+    document.getElementById('lens-list').innerHTML = l;
+  }
+  function renderLogs() {
+    var out = '';
+    LOGS.forEach(function (g) { out += '<div class="log"><span class="id">' + g[0] + ' · ' + g[1] + ' · พบใน ' + g[2] + '</span><q>' + g[3] + '</q></div>'; });
+    document.getElementById('log-list').innerHTML = out;
+  }
+
+  /* tabs */
+  var TABS = ['home', 'systems', 'body', 'worlds', 'beings', 'story', 'arg', 'tech', 'plan'];
+  function show(id) {
+    TABS.forEach(function (t) { document.getElementById(t).hidden = (t !== id); });
+    var links = document.querySelectorAll('#tabbar a');
+    for (var i = 0; i < links.length; i++) {
+      if (links[i].getAttribute('href') === '#' + id) links[i].setAttribute('aria-current', 'page'); else links[i].removeAttribute('aria-current');
+    }
+  }
+  function route() {
+    var h = (location.hash || '').replace('#', '') || 'home';
+    var target = null, tab = h;
+    if (TABS.indexOf(h) < 0) {
+      target = document.getElementById(h);
+      var p = target && target.closest('.tab');
+      tab = p ? p.id : 'home';
+      if (!p) target = null;
+    }
+    show(tab);
+    if (target) target.scrollIntoView(); else window.scrollTo(0, 0);
+    var a = document.querySelector('#tabbar a[aria-current="page"]');
+    if (a && a.scrollIntoView) { try { a.scrollIntoView({ inline: 'center', block: 'nearest' }); } catch (e) {} }
+  }
+
+  /* door demo */
+  var POOL = WORLDS.map(function (w) { return w.c + ' ' + w.n; });
+  var N = 6, st = [], locked = false, timer = null;
+  var hr = document.getElementById('h-red'), hb = document.getElementById('h-blue'), lob = document.getElementById('lobby');
+  var br = document.getElementById('b-red'), bb = document.getElementById('b-blue'), zr = document.getElementById('z-red'), zb = document.getElementById('z-blue');
+  var out = document.getElementById('status');
+  function need() { return Math.floor(N / 2) + 1; }
+  function cnt(v) { return st.filter(function (s) { return s === v; }).length; }
+  function mk(i) {
+    var b = document.createElement('button'); b.type = 'button';
+    var s = st[i]; b.className = (s ? 'hand' : 'pl' + '') ; if (!s) b.className = 'pl';
+    b.textContent = 'P' + (i + 1); b.disabled = locked;
+    b.setAttribute('aria-label', 'ผู้เล่น ' + (i + 1) + (s === 1 ? ' แนบประตูแดง' : s === 2 ? ' แนบประตูฟ้า' : ' ยังไม่แนบ'));
+    b.addEventListener('click', function () { st[i] = (st[i] + 1) % 3; update(); });
+    return b;
+  }
+  function heart(n) { var s = ''; for (var i = 0; i < n; i++) s += '♥'; return n ? s + ' เต้นเร็วขึ้น' : 'เงียบ'; }
+  function render() {
+    hr.innerHTML = ''; hb.innerHTML = ''; lob.innerHTML = '<span>ยังไม่แนบ:</span>';
+    zr.classList.remove('sealed'); zb.classList.remove('sealed');
+    st.forEach(function (s, i) { (s === 1 ? hr : s === 2 ? hb : lob).appendChild(mk(i)); });
+    br.textContent = 'หัวใจ ' + heart(cnt(1)); bb.textContent = 'หัวใจ ' + heart(cnt(2));
+  }
+  function resolve(win, why) {
+    locked = true; render(); (win === 1 ? zb : zr).classList.add('sealed');
+    var name = win === 1 ? 'แดง' : 'ฟ้า', t = 5;
+    clearInterval(timer);
+    function tick() {
+      if (t > 0) { out.innerHTML = why + ' ประตู' + name + 'เปิด อีกบานถูกล็อก<br><span class="big">' + t + '</span>'; t--; }
+      else { clearInterval(timer); out.innerHTML = 'ทุกคนถูกดึงเข้ามิติ: <span class="big">' + POOL[Math.floor(Math.random() * POOL.length)] + '</span><br>สุ่มจากพูลร่วม สีที่เลือกไม่มีผล'; }
+    }
+    tick(); timer = setInterval(tick, 1000);
+  }
+  function update() {
+    render();
+    var r = cnt(1), b = cnt(2), n = need();
+    if (r >= n) return resolve(1, 'ฝ่ามือถึง ' + n + ' คน');
+    if (b >= n) return resolve(2, 'ฝ่ามือถึง ' + n + ' คน');
+    var m = 'แดง ' + r + ' · ฟ้า ' + b + ' · ต้องการ ' + n + ' คนบนบานเดียวกัน';
+    if (r + b > 0) m += ' · ตัวจับเวลา 30 วินาทีเริ่มแล้ว';
+    out.textContent = m;
+  }
+  function reset() { clearInterval(timer); locked = false; st = []; for (var i = 0; i < N; i++) st.push(0); update(); }
+  function setN(n) {
+    N = n;
+    document.getElementById('n6').setAttribute('aria-pressed', n === 6);
+    document.getElementById('n8').setAttribute('aria-pressed', n === 8);
+    reset();
+  }
+  document.getElementById('n6').addEventListener('click', function () { setN(6); });
+  document.getElementById('n8').addEventListener('click', function () { setN(8); });
+  document.getElementById('b-reset').addEventListener('click', reset);
+  document.getElementById('b-rand').addEventListener('click', function () {
+    if (locked) { clearInterval(timer); locked = false; }
+    st = st.map(function () { return Math.floor(Math.random() * 3); }); update();
+  });
+  document.getElementById('b-time').addEventListener('click', function () {
+    if (locked) return;
+    var r = cnt(1), b = cnt(2);
+    if (r > b) resolve(1, 'หมดเวลา แดงมีมือมากกว่า');
+    else if (b > r) resolve(2, 'หมดเวลา ฟ้ามีมือมากกว่า');
+    else resolve(Math.random() < .5 ? 1 : 2, 'เสมอหรือไม่มีใครแนบ ประตูตัดสินใจแทนคุณ');
+  });
+
+  renderWorlds(); renderEnt(); renderLogs(); setN(6);
+  window.addEventListener('hashchange', route); route();
+})();
+</script>
